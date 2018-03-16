@@ -3,6 +3,7 @@ default: test lint build
 .PHONY: node_modules
 node_modules:
 	yarn install
+	git submodule update --init --recursive
 
 .PHONY: build
 build: node_modules

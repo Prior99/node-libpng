@@ -15,7 +15,8 @@ PngImage::PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, 
     pngPtr(pngPtr),
     infoPtr(infoPtr),
     inputSize(inputSize),
-    dataIn(dataIn) {}
+    dataIn(dataIn),
+    consumed(8) {}
 
 PngImage::~PngImage() {}
 
@@ -55,6 +56,7 @@ NAN_METHOD(PngImage::New) {
         // Check if the buffer contains a PNG image at all.
         if (inputSize < 8 || png_sig_cmp(dataIn, 0, 8)) {
             Nan::ThrowTypeError("Invalid PNG buffer.");
+            return;
         }
 
         auto pngPtr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -74,18 +76,15 @@ NAN_METHOD(PngImage::New) {
             return;
         }
 
-        // png_init_io(pngPtr, dataIn);
-
         PngImage* instance = new PngImage(pngPtr, infoPtr, inputSize, dataIn);
         instance->Wrap(info.This());
 
         png_set_read_fn(pngPtr, reinterpret_cast<png_voidp>(instance), [] (png_structp passedStruct, png_bytep target, png_size_t length) {
-            auto pngImage = reinterpret_cast<PngImage*>(passedStruct);
-            cout << "reading " << length << " from " << pngImage->inputSize << endl;
+            auto pngImage = reinterpret_cast<PngImage*>(png_get_io_ptr(passedStruct));
             memcpy(reinterpret_cast<uint8_t*>(target), pngImage->dataIn + pngImage->consumed, length);
             pngImage->consumed += length;
-            cout << "done." << pngImage->consumed << "/" << pngImage->inputSize << endl;
         });
+
 
         png_set_sig_bytes(pngPtr, 8);
         png_read_info(pngPtr, infoPtr);
