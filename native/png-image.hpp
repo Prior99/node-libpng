@@ -12,24 +12,28 @@ class PngImage : public Nan::ObjectWrap {
 
         static NAN_METHOD(New);
 
-        static NAN_GETTER(bitDepth);
-        static NAN_GETTER(channels);
-        static NAN_GETTER(colorType);
-        static NAN_GETTER(height);
-        static NAN_GETTER(width);
-        static NAN_GETTER(interlaceType);
-        static NAN_GETTER(rowBytes);
-        // static NAN_GETTER(lastModification);
-        static NAN_GETTER(offsetX);
-        static NAN_GETTER(offsetY);
-        static NAN_GETTER(pixelsPerMeterX);
-        static NAN_GETTER(pixelsPerMeterY);
+        static NAN_GETTER(getBitDepth);
+        static NAN_GETTER(getChannels);
+        static NAN_GETTER(getColorType);
+        static NAN_GETTER(getHeight);
+        static NAN_GETTER(getWidth);
+        static NAN_GETTER(getInterlaceType);
+        static NAN_GETTER(getRowBytes);
+        // static NAN_GETTER(getLastModification);
+        static NAN_GETTER(getOffsetX);
+        static NAN_GETTER(getOffsetY);
+        static NAN_GETTER(getPixelsPerMeterX);
+        static NAN_GETTER(getPixelsPerMeterY);
 
-        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr);
+        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *dataIn);
         ~PngImage();
+        void readCallback(png_structp _, png_bytep target, png_size_t length);
 
         png_structp pngPtr;
         png_infop infoPtr;
+        uint32_t inputSize;
+        uint32_t consumed;
+        uint8_t *dataIn;
 };
 
 #endif
