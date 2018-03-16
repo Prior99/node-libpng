@@ -6,6 +6,8 @@
 
 Unofficial bindings for node to libpng.
 
+Please also refer to the **[Documentation](https://prior99.github.io/node-libpng/docs/index.html)**.
+
 ## Table of contents
 
  * [node-libpng](#node-libpng)

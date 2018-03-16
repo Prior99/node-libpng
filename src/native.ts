@@ -1,4 +1,4 @@
-import * as bindings from "bindings";
+import bindings = require("bindings"); // tslint:disable-line
 
 export const {
     __native_PngImage,

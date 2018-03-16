@@ -9,8 +9,7 @@
         "jsx": "react",
         "outDir": "dist",
         "lib": ["es2016"],
-        "baseUrl": "./src",
-        "emitDecoratorMetadata": true
+        "moduleResolution": "node"
     },
     "exclude": [
         "**/__tests__/*",
@@ -18,8 +17,5 @@
         "dist/",
         "example/",
         "index.d.ts"
-    ],
-    "include": [
-        "typings/*"
     ]
 }

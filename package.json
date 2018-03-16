@@ -1,5 +1,5 @@
 {
-  "name": "native-image-diff",
+  "name": "node-libpng",
   "version": "0.0.0",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
@@ -9,7 +9,8 @@
     "build": "tsc -p tsconfig-production.json --sourceMap",
     "test": "jest",
     "lint": "tslint --format stylish --project tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "docs": "typedoc --mode file --out docs/ --exclude '**/test-*.ts' src/"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,7 @@
     "mapCoverage": true
   },
   "devDependencies": {
+    "@types/bindings": "^1.3.0",
     "@types/jest": "^21.1.7",
     "@types/node": "^9.4.7",
     "bind-decorator": "^1.0.11",
@@ -57,6 +59,7 @@
     "jest": "^21.2.1",
     "ts-jest": "^21.2.3",
     "tslint": "^5.8.0",
+    "typedoc": "^0.11.1",
     "typescript": "^2.6.1"
   },
   "dependencies": {
