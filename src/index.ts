@@ -1,3 +1,2 @@
-import * as bindings from "bindings";
-
-export const { PngImage, isPng } = bindings("node-libpng");
+export { PngImage } from "./png-image";
+export { isPng } from "./is-png";

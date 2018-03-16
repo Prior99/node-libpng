@@ -1,21 +1,6 @@
-declare class PngImage {
-    public bitDepth: number;
-    public channels: number;
-    public colorType: number;
-    public height: number;
-    public width: number;
-    public interlaceType: number;
-    public rowBytes: number;
-    public lastModification: number;
-    public offsetX: number;
-    public offsetY: number;
-    public pixelsPerMeterX: number;
-    public pixelsPerMeterY: number;
-}
-
 interface Bindings {
-    readonly isPng: (buffer: Buffer) => boolean;
-    readonly PngImage: PngImage;
+    readonly __native_isPng: (buffer: Buffer) => boolean;
+    readonly __native_PngImage: any;
 }
 
 declare function bindings(bindingName: string): Bindings;

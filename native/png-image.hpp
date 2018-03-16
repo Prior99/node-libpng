@@ -9,9 +9,9 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_MODULE_INIT(Init);
 
     private:
-
+        // Define a method for creating a new instance using the `new` keyword.
         static NAN_METHOD(New);
-
+        // Define all getters referring to the `png_get_...` functions.
         static NAN_GETTER(getBitDepth);
         static NAN_GETTER(getChannels);
         static NAN_GETTER(getColorType);
@@ -19,21 +19,21 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_GETTER(getWidth);
         static NAN_GETTER(getInterlaceType);
         static NAN_GETTER(getRowBytes);
-        // static NAN_GETTER(getLastModification);
         static NAN_GETTER(getOffsetX);
         static NAN_GETTER(getOffsetY);
         static NAN_GETTER(getPixelsPerMeterX);
         static NAN_GETTER(getPixelsPerMeterY);
 
-        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *dataIn);
+        // C++ only constructor and destructor.
+        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *input);
         ~PngImage();
-        void readCallback(png_structp _, png_bytep target, png_size_t length);
-
+        // libpng pointers.
         png_structp pngPtr;
         png_infop infoPtr;
+        // Properties describing the input buffer to read.
         uint32_t inputSize;
+        uint8_t *input;
         uint32_t consumed;
-        uint8_t *dataIn;
 };
 
 #endif

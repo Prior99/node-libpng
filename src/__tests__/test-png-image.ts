@@ -7,8 +7,8 @@ describe("PngImage", () => {
         const image = new PngImage(buffer);
 
         expect(image.bitDepth).toBe(8);
-        expect(image.channels).toBe("palette");
-        expect(image.colorType).toBe(2);
+        expect(image.channels).toBe(3);
+        expect(image.colorType).toBe("rgb");
         expect(image.width).toBe(256);
         expect(image.height).toBe(256);
         expect(image.interlaceType).toBe("none");
