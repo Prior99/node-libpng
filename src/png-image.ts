@@ -120,4 +120,9 @@ export class PngImage {
      * Gathered from `png_get_y_pixels_per_meter`.
      */
     public get pixelsPerMeterY(): number { return this.nativePng.pixelsPerMeterY; }
+
+    /**
+     * The buffer containing the data of the decoded image.
+     */
+    public get buffer(): Buffer { return this.nativePng.buffer; }
 }
