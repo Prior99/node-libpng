@@ -12,16 +12,21 @@
     },
     "targets" : [
         {
+            "dependencies": [
+                "zlib.gyp:zlib"
+            ],
             "target_name" : "libpng",
             "type" : "static_library",
-            "cflags" : [
-                "-Wall",
-                "-Wno-unused-parameter",
-                "-Wno-missing-field-initializers",
-                "-Wextra"
-            ],
+            "cflags" : [],
+            "direct_dependent_settings": {
+                "include_dirs": [
+                    "./config/linux/",
+                    "./libpng"
+                ]
+            },
             "include_dirs": [
-                "config/linux/"
+                "./config/linux/",
+                "./libpng"
             ],
             "sources" : [
                 "libpng/png.c",

@@ -3,7 +3,7 @@
         {
             "target_name" : "node-libpng",
             "dependencies" : [
-                "deps/binding.gyp:libpng"
+                "./deps/libpng.gyp:libpng"
             ],
             "cflags" : [
                 "-Wall",
@@ -12,12 +12,14 @@
                 "-Wextra"
             ],
             "include_dirs": [
-                "<!(node -e \"require('nan')\")"
+                "<!(node -e \"require('nan')\")",
+                "./deps/libpng",
+                "./deps/zlib"
             ],
             "sources" : [
-                "native/module.cpp",
-                "native/is-png.cpp",
-                "native/png-image.cpp"
+                "./native/module.cpp",
+                "./native/is-png.cpp",
+                "./native/png-image.cpp"
             ]
         }
     ]
