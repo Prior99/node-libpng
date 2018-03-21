@@ -25,7 +25,7 @@
                 ]
             },
             "include_dirs": [
-                "./config/linux/",
+                "./config/<(OS)",
                 "./libpng"
             ],
             "sources" : [

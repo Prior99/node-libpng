@@ -16,7 +16,7 @@
             "type" : "static_library",
             "cflags" : [],
             "include_dirs": [
-                "config/linux/",
+                "config/<(OS)/",
                 "zlib"
             ],
             "sources" : [
