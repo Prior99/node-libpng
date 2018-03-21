@@ -1,15 +1,4 @@
 {
-    "target_defaults" : {
-        "default_configuration" : "Debug",
-        "configuration" : {
-            "Debug" : {
-                "defines" : ["DEBUG", "_DEBUG"]
-            },
-            "Release" : {
-                "defines" : ["NODEBUG"]
-            }
-        }
-    },
     "targets" : [
         {
             "dependencies": [

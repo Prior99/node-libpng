@@ -1,21 +1,62 @@
 language: node_js
+compiler: gcc
 node_js:
   - '8'
 
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install make git -qq
-  - npm install -g yarn
+env:
+  global:
+    - SKIP_BINARY_DOWNLOAD_FOR_CI=true
 
-install:
-  - yarn install
+jobs:
+  include:
+    - stage: build
+      node_js: "6"
+      os: linux
+    - stage: build
+      node_js: "7"
+      os: linux
+    - stage: build
+      node_js: "8"
+      os: linux
+    - stage: build
+      node_js: "9"
+      os: linux
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-7
+      - g++-7
+      - make
+      - git
+
+before_install:
+  - npm install -g yarn
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then
+      export CC="gcc-7";
+      export CXX="g++-7";
+      export LINK="gcc-7";
+      export LINKXX="g++-7";
+    fi
+  - node --version
+  - yarn --version
 
 script:
-  - yarn build
-  - yarn lint
-  - yarn test
+  - make
 
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 
 cache: yarn
+
+deploy:
+  provider: releases
+  api_key:
+    secure: "Bh6T2y2dIAj08SbP//m+wbsjC1y7GN1eAS7G7vwgC71yxaSCSEGQ0T2uc5SsOt/vAR4OEMeHqOerL/H1eI1s5QLtF8Q/ElVf6N42jp9rvXBSrQFSzRkXzjVLtkFCspU+1Led6YzMn6kcjUCg+NrNhyiQBPOUplCWppaphQazi7WpSBibyzjJ6XgHQRtWt2jZOaMPN0k7NldGI+aAl424kCZyTVs7Z46Eds146TcHX1XVQMDt3s9qFrEqNGjabqfDBEuORO6gbFD51MmOB910EYZ5rG47TNIXnKvW6awipGfGomAcmnjHc0Q1y8i4lvFAJDVpQejrQBmFz0MoADaqncB3VBlAgZP475iNAGnf9jSgBzwwNFV9dxNr+a1aEykTeXWWhD121zWBwm8QIbbLQt1vfPQBFU3OwMy8E8gJDKfqni99WKuALqFq+ljzXTpFfvIgzUMm/8cSjjTcMz8xDJHeALxf4YxUmTLGvKW2VnBqdlH+ddaWNeHWvMASVjxSvnWDI0TOX1VxGOFS8iZA53OUDY3XNIyb6QvvXd3j+x8gVnnxtNkranZjK1fIl15ipBqRlZDflgqgMUpFnkwJQmb3qKwv87GvOhGsZudqsbnfHA18eWjrh3UL3cTT7JyoDTmpKgS7do53qunzodZ0itNJNgC8AMoLYDezsXkX9+I="
+  file_glob: true
+  file: "node-libpng-*-*-*.node"
+  skip_cleanup: true
+  on:
+    tags: true

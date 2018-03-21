@@ -13,6 +13,7 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
 
  * [node-libpng](#node-libpng)
      * [Table of contents](#table-of-contents)
+     * [Supported environment](#supported-environments)
      * [Contributing](#contributing)
          * [Building](#building)
          * [Running the tests with coverage](#running-the-tests-with-coverage)
@@ -20,6 +21,18 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
          * [Starting the example](#starting-the-example)
          * [Generating the libpng config](#generating-the-libpng-config)
      * [Contributors](#contributors)
+
+## Supported environments
+
+This is a native Addon to NodeJS which delivers prebuilt binaries. Only some environments are supported:
+
+| Node Version      | Windows 64-Bit     | Windows 32-Bit     | Linux 64-Bit       | Linux 32-Bit | OSX                |
+|-------------------|--------------------|--------------------|--------------------|--------------|--------------------|
+| Earlier           | :x:                | :x:                | :x:                | :x:          | :x:                |
+| Node 6 *(Abi 48)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:          | :heavy_check_mark: |
+| Node 7 *(Abi 51)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:          | :heavy_check_mark: |
+| Node 8 *(Abi 57)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:          | :heavy_check_mark: |
+| Node 9 *(Abi 59)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :x:          | :heavy_check_mark: |
 
 ## Contributing
 

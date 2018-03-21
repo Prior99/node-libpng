@@ -14,7 +14,6 @@
     - x64
     - x86
   build: off
-  test: off
   clone_folder: C:\repositories\node-libpng
   # This is adapted from the appveyor.yml in node-sass.
   # http://www.wintellect.com/devcenter/jrobbins/pdb-files-what-every-developer-must-know
@@ -46,25 +45,19 @@
     - npm install -g yarn
     - yarn --version
     - yarn install
-  before_deploy:
-    # Save artifacts with full qualified names of binding.node and binding.pdb
-    # (which we use in node-sass-binaries repo)
-    - ps: >-
-        Get-ChildItem .\vendor\**\*.node | % {
-           ( $BindingName = $_.FullName ).Split('\\') |
-             Select-Object -Last 2 | Select-Object -First 1 } |
-               .{ process { (
-                  @( $BindingName,
-                       ( ( $_, "binding.node" ) -join '_' ) ),
-                  @( ".\build\Release\binding.pdb",
-                       ( ( $_, "binding.pdb" ) -join '_' ) )
-               ) } } | % { Push-AppveyorArtifact $_[0] -FileName $_[1] }
+  test_script:
+    - ps: set-location -path C:\repositories\node-libpng
+    - yarn test
+  artifacts:
+    - path: node-libpng-*-*-*.node
+      name: node-libpng
   deploy:
     - provider: GitHub
-      description: $(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)
-      artifact:
+      artifact: node-libpng
       auth_token:
         secure: +wXtQW8okFkZw+VEkv7Fx4+/G5syQCY02dvOSTTew+/Bp9F8dOiI+pIQaJ8VhLPW
+      draft: false
+      prerelease: false
       on:
         appveyor_repo_tag: true
 # The testing configuration.
