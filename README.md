@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/node-libpng.svg)](https://www.npmjs.com/package/node-libpng)
 [![Build Status](https://travis-ci.org/Prior99/node-libpng.svg?branch=master)](https://travis-ci.org/Prior99/node-libpng)
+[![Build status](https://ci.appveyor.com/api/projects/status/1dbpcj210jlyv0e1/branch/master?svg=true)](https://ci.appveyor.com/project/Prior99/node-libpng/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/Prior99/node-libpng/badge.svg?branch=master)](https://coveralls.io/github/Prior99/node-libpng?branch=master)
 
 Unofficial bindings for node to libpng.

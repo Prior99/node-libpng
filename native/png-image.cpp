@@ -32,7 +32,7 @@ NAN_MODULE_INIT(PngImage::Init) {
     auto ctor = Nan::New<FunctionTemplate>(PngImage::New);
     auto ctorInstance = ctor->InstanceTemplate();
     ctor->SetClassName(Nan::New("__native_PngImage").ToLocalChecked());
-    ctorInstance->SetInternalFieldCount(5);
+    ctorInstance->SetInternalFieldCount(8);
     // Hand over all getters defined on `PngImage` to node.
     Nan::SetAccessor(ctorInstance, Nan::New("bitDepth").ToLocalChecked(), PngImage::getBitDepth);
     Nan::SetAccessor(ctorInstance, Nan::New("channels").ToLocalChecked(), PngImage::getChannels);
@@ -98,10 +98,12 @@ NAN_METHOD(PngImage::New) {
         auto rowCount = png_get_image_height(pngPtr, infoPtr);
         auto rowBytes = png_get_rowbytes(pngPtr, infoPtr);
         instance->decodedSize = rowBytes * rowCount;
-        instance->decoded = reinterpret_cast<uint8_t*>(malloc(instance->decodedSize));
-
+        // A vector is used to address each row of the image inside the 1-dimensional `decoded` array.
+        // Resize the vector to the amount of rows used, assigning each row to `nullptr`.
         instance->rows.resize(rowCount, nullptr);
         instance->decoded = new png_byte[instance->decodedSize];
+        // Iterate over every row, and assign the pointer inside the `decoded` array to the element in the vector.
+        // This way each element in the vector points to the beginning of the 2-dimensional row inside the 1-dimensional array.
         for(size_t row = 0; row < rowCount; ++row) {
             instance->rows[row] = instance->decoded + row * rowBytes;
         }
