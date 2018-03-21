@@ -45,6 +45,8 @@
     - npm install -g yarn
     - yarn --version
     - yarn install
+  build_script:
+    - yarn build
   test_script:
     - ps: set-location -path C:\repositories\node-libpng
     - yarn test
@@ -102,6 +104,8 @@
     - npm install -g yarn
     - yarn --version
     - yarn install
+  build_script:
+    - yarn build
   test_script:
     - ps: set-location -path C:\repositories\node-libpng
     - yarn test

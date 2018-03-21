@@ -1,14 +1,16 @@
 {
   "name": "node-libpng",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
   "license": "MIT",
   "gypfile": true,
   "scripts": {
-    "postinstall": "node scripts/rename.js",
+    "install": "node scripts/install.js",
+    "prebuild": "node-gyp rebuild",
     "build": "tsc -p tsconfig-production.json --sourceMap",
+    "postbuild": "node scripts/rename.js",
     "test": "jest",
     "lint": "tslint --format stylish --project tsconfig.json",
     "clean": "rm -rf dist build",
@@ -27,14 +29,6 @@
     "example"
   ],
   "jest": {
-    "coverageThreshold": {
-      "global": {
-        "statements": 100,
-        "lines": 100,
-        "functions": 100,
-        "branches": 100
-      }
-    },
     "collectCoverage": true,
     "moduleFileExtensions": [
       "ts",
@@ -59,12 +53,14 @@
     "bind-decorator": "^1.0.11",
     "coveralls": "^3.0.0",
     "jest": "^21.2.1",
+    "node-gyp": "^3.6.2",
     "ts-jest": "^21.2.3",
     "tslint": "^5.8.0",
     "typedoc": "^0.11.1",
     "typescript": "^2.6.1"
   },
   "dependencies": {
-    "nan": "^2.9.2"
+    "nan": "^2.9.2",
+    "request": "^2.85.0"
   }
 }

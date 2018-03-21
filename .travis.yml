@@ -1,12 +1,8 @@
 language: node_js
 compiler: gcc
-node_js:
-  - '8'
-
 env:
   global:
     - SKIP_BINARY_DOWNLOAD_FOR_CI=true
-
 jobs:
   include:
     - stage: build
@@ -21,7 +17,6 @@ jobs:
     - stage: build
       node_js: "9"
       os: linux
-
 addons:
   apt:
     sources:
@@ -31,7 +26,6 @@ addons:
       - g++-7
       - make
       - git
-
 before_install:
   - npm install -g yarn
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
@@ -42,15 +36,11 @@ before_install:
     fi
   - node --version
   - yarn --version
-
 script:
   - make
-
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-
 cache: yarn
-
 deploy:
   provider: releases
   api_key:
