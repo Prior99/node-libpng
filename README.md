@@ -13,7 +13,8 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
 
  * [node-libpng](#node-libpng)
      * [Table of contents](#table-of-contents)
-     * [Supported environment](#supported-environments)
+     * [Supported environments](#supported-environments)
+     * [Benchmark](#benchmark)
      * [Contributing](#contributing)
          * [Building](#building)
          * [Running the tests with coverage](#running-the-tests-with-coverage)
@@ -33,6 +34,12 @@ This is a native Addon to NodeJS which delivers prebuilt binaries. Only some env
 | Node 7 *(Abi 51)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | -            | :heavy_check_mark: |
 | Node 8 *(Abi 57)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | -            | :heavy_check_mark: |
 | Node 9 *(Abi 59)* | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | -            | :heavy_check_mark: |
+
+## Benchmark
+
+As it is a native addon, *node-libpng* is much faster than libraries like [pngjs](https://www.npmjs.com/package/pngjs):
+
+![benchmark](images/benchmark.png)
 
 ## Contributing
 

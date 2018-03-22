@@ -1,0 +1,19 @@
+{
+  "name": "node-libpng-benchmark",
+  "version": "0.0.0",
+  "description": "Benchmark for node-libpng.",
+  "main": "benchmar.js",
+  "author": "Frederick Gnodtke",
+  "license": "MIT",
+  "scripts": {
+    "start": "node benchmark.js"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "benchmark": "^2.1.4",
+    "chart.js": "2.6",
+    "chartjs-node": "^1.6.1",
+    "node-libpng": "file:..",
+    "pngjs": "^3.3.2"
+  }
+}
