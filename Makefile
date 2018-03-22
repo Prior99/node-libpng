@@ -29,6 +29,5 @@ clean:
 release: clean test lint build
 	test `cat package.json | jq ".version"` = '"${VERSION}"'
 	git tag ${VERSION}
-	git push
 	git push --tags
 	yarn publish
