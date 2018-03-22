@@ -24,7 +24,6 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_GETTER(getOffsetY);
         static NAN_GETTER(getPixelsPerMeterX);
         static NAN_GETTER(getPixelsPerMeterY);
-        static NAN_GETTER(getBuffer);
 
         // C++ only constructor and destructor.
         explicit PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *input);
@@ -40,6 +39,7 @@ class PngImage : public Nan::ObjectWrap {
         png_bytep decoded;
         std::vector<png_bytep> rows;
         uint32_t decodedSize;
+        
 };
 
 #endif

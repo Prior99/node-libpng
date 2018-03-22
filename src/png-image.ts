@@ -124,5 +124,5 @@ export class PngImage {
     /**
      * The buffer containing the data of the decoded image.
      */
-    public get buffer(): Buffer { return this.nativePng.buffer; }
+    public get data(): Buffer { return this.nativePng.data; }
 }

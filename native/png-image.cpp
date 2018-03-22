@@ -45,7 +45,6 @@ NAN_MODULE_INIT(PngImage::Init) {
     Nan::SetAccessor(ctorInstance, Nan::New("offsetY").ToLocalChecked(), PngImage::getOffsetY);
     Nan::SetAccessor(ctorInstance, Nan::New("pixelsPerMeterX").ToLocalChecked(), PngImage::getPixelsPerMeterX);
     Nan::SetAccessor(ctorInstance, Nan::New("pixelsPerMeterY").ToLocalChecked(), PngImage::getPixelsPerMeterY);
-    Nan::SetAccessor(ctorInstance, Nan::New("buffer").ToLocalChecked(), PngImage::getBuffer);
     // Make sure the constructor stays persisted by storing it in a `Nan::Persistant`.
     constructor.Reset(ctor->GetFunction());
     // Store `NativePngImage` in the module's exports.
@@ -108,6 +107,11 @@ NAN_METHOD(PngImage::New) {
             instance->rows[row] = instance->decoded + row * rowBytes;
         }
         png_read_image(pngPtr, &instance->rows[0]);
+
+        // Nan::Persistent<Object> persistentHandle;
+        // persistentHandle.Reset()
+        // persistentHandle.MakeWeak();
+        Nan::Set(info.This(), Nan::New("data").ToLocalChecked(), Nan::NewBuffer(reinterpret_cast<char*>(instance->decoded), instance->decodedSize).ToLocalChecked());
 
         // Set the return value of the call to the constructor to the newly created instance.
         info.GetReturnValue().Set(info.This());
@@ -254,13 +258,4 @@ NAN_GETTER(PngImage::getPixelsPerMeterY) {
     auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
     double pixelsPerMeterY = png_get_x_pixels_per_meter(pngImageInstance->pngPtr, pngImageInstance->infoPtr);
     info.GetReturnValue().Set(Nan::New(pixelsPerMeterY));
-}
-
-/**
- * Returns the buffer of data for the decodded image.
- */
-NAN_GETTER(PngImage::getBuffer) {
-    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
-    Local<Object> buffer = Nan::NewBuffer(reinterpret_cast<char*>(pngImageInstance->decoded), pngImageInstance->decodedSize).ToLocalChecked();
-    info.GetReturnValue().Set(buffer);
 }

@@ -21,14 +21,13 @@ describe("PngImage", () => {
 
     it("reads decodes a normal png file", () => {
         const inputBuffer = readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`);
-        const { buffer } = new PngImage(inputBuffer);
-        const data = [];
-        for (let i = 0; i < buffer.length; i += 3) {
+        const { data } = new PngImage(inputBuffer);
+        for (let i = 0; i < data.length; i += 3) {
             // The image is of 256 pixel width.
             const x = (i / 3) % 256;
-            const r = buffer[i + 0];
-            const g = buffer[i + 1];
-            const b = buffer[i + 2];
+            const r = data[i + 0];
+            const g = data[i + 1];
+            const b = data[i + 2];
             // The image is a gradient from red (255, 0, 0) to blue (0, 0, 255).
             expect(r).toBe(255 - x);
             expect(g).toBe(0);

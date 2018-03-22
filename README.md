@@ -37,9 +37,21 @@ This is a native Addon to NodeJS which delivers prebuilt binaries. Only some env
 
 ## Benchmark
 
-As it is a native addon, *node-libpng* is much faster than libraries like [pngjs](https://www.npmjs.com/package/pngjs):
+As it is a native addon, **node-libpng** is much faster than libraries like [pngjs](https://www.npmjs.com/package/pngjs):
 
-![benchmark](images/benchmark.png)
+### Read access (Decoding)
+
+The chart below shows the comparison of decoding an image between [pngjs](https://www.npmjs.com/package/pngjs) and **node-libpng**.
+The time to fully decode an image is measured.
+
+![read benchmark](images/benchmark-read.png)
+
+### Pixel Access
+
+The chart below shows the comparison of accessing all pixels in a decoded image between [pngjs](https://www.npmjs.com/package/pngjs) and **node-libpng**.
+The time to fully access every pixel in the raw data is measured.
+
+![access benchmark](images/benchmark-access.png)
 
 ## Contributing
 
