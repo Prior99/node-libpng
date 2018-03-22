@@ -17,6 +17,18 @@ jobs:
     - stage: build
       node_js: "9"
       os: linux
+    - stage: build
+      node_js: "6"
+      os: osx
+    - stage: build
+      node_js: "7"
+      os: osx
+    - stage: build
+      node_js: "8"
+      os: osx
+    - stage: build
+      node_js: "9"
+      os: osx
 addons:
   apt:
     sources:
