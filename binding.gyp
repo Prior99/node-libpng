@@ -18,6 +18,7 @@
             ],
             "sources" : [
                 "./native/module.cpp",
+                "./native/encode.cpp",
                 "./native/is-png.cpp",
                 "./native/png-image.cpp"
             ]

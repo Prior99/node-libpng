@@ -90,7 +90,7 @@ NAN_METHOD(PngImage::New) {
         ReadStruct readStruct{ .length = inputSize, .input = input, .consumed = 8 };
         // This callback will be called each time libpng requests a new chunk.
         png_set_read_fn(pngPtr, reinterpret_cast<png_voidp>(&readStruct), [] (png_structp passedStruct, png_bytep target, png_size_t length) {
-            ReadStruct *readStruct = reinterpret_cast<ReadStruct*>(png_get_io_ptr(passedStruct));
+            auto readStruct = reinterpret_cast<ReadStruct*>(png_get_io_ptr(passedStruct));
             memcpy(reinterpret_cast<uint8_t*>(target), readStruct->input + readStruct->consumed, length);
             readStruct->consumed += length;
         });
@@ -136,7 +136,7 @@ NAN_METHOD(PngImage::New) {
  * This getter will return the width of the image, gathered from `png_get_image_width`.
  */
 NAN_GETTER(PngImage::getWidth) {
-    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.This());
+    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
     double width = png_get_image_width(pngImageInstance->pngPtr, pngImageInstance->infoPtr);
     // libpng will return `0` instead of the width if it couldn't be read.
     if (width == 0) {
@@ -149,7 +149,7 @@ NAN_GETTER(PngImage::getWidth) {
  * This getter will return the width of the image, gathered from `png_get_image_height`.
  */
 NAN_GETTER(PngImage::getHeight) {
-    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.This());
+    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
     double height = png_get_image_height(pngImageInstance->pngPtr, pngImageInstance->infoPtr);
     // libpng will return `0` instead of the height if it couldn't be read.
     if (height == 0) {

@@ -9,5 +9,6 @@ if (!fs.existsSync(qualifiedName)) {
 
 export const {
     __native_PngImage,
+    __native_encode,
     __native_isPng,
 } = require(qualifiedName); // tslint:disable-line
