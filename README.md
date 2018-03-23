@@ -15,6 +15,9 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
      * [Table of contents](#table-of-contents)
      * [Supported environments](#supported-environments)
      * [Benchmark](#benchmark)
+         * [Read access (Decoding)](#read-access-decoding)
+         * [Write access (Encoding)](#write-access-encoding)
+         * [Pixel access](#pixel-access)
      * [Contributing](#contributing)
          * [Building](#building)
          * [Running the tests with coverage](#running-the-tests-with-coverage)
@@ -41,17 +44,30 @@ As it is a native addon, **node-libpng** is much faster than libraries like [png
 
 ### Read access (Decoding)
 
-The chart below shows the comparison of decoding an image between [pngjs](https://www.npmjs.com/package/pngjs) and **node-libpng**.
-The time to fully decode an image is measured.
+The chart below shows the comparison of decoding an image between [pngjs](https://www.npmjs.com/package/pngjs) (sync api) and **node-libpng**.
+The time to fully decode a 4096x4096 image is measured (Higher is better).
 
 ![read benchmark](images/benchmark-read.png)
+
+*(The x-axis scale shows the amount of fully decoded images per second.)*
+
+### Write access (Encoding)
+
+The chart below shows the comparison of encoding an image between [pngjs](https://www.npmjs.com/package/pngjs) (sync api) and **node-libpng**.
+The time to fully encode a 4096x4096 image is measured (Higher is better).
+
+![access benchmark](images/benchmark-encode.png)
+
+*(The x-axis scale shows the amount of fully encoded images per second.)*
 
 ### Pixel Access
 
 The chart below shows the comparison of accessing all pixels in a decoded image between [pngjs](https://www.npmjs.com/package/pngjs) and **node-libpng**.
-The time to fully access every pixel in the raw data is measured.
+The time to fully access every pixel in the raw data is measured (Higher is better).
 
 ![access benchmark](images/benchmark-access.png)
+
+*(The x-axis scale shows the amount of fully accessed images per second.)*
 
 ## Contributing
 

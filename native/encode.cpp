@@ -22,7 +22,6 @@ NAN_METHOD(encode) {
     // calculate derived parameters.
     const auto colorType = alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     const auto rowBytes = (alpha ? 4 : 3) * width;
-    const auto encodedSize = rowBytes * height;
     // Create libpng write struct. Fail if unable to create.
     png_structp pngPtr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
     if (!pngPtr) {
@@ -43,7 +42,6 @@ NAN_METHOD(encode) {
     vector<uint8_t> encoded;
     // This callback will be called each time libpng wants to write an encoded chunk.
     png_set_write_fn(pngPtr, &encoded, [] (png_structp pngPtr, png_bytep data, png_size_t length) {
-        cout << "encoding " << length << endl;
         auto encoded = reinterpret_cast<vector<uint8_t>*>(png_get_io_ptr(pngPtr));
         encoded->insert(encoded->end(), data, data + length);
     }, nullptr);
@@ -63,10 +61,9 @@ NAN_METHOD(encode) {
     // Encode the PNG.
     png_write_info(pngPtr, infoPtr);
     png_write_rows(pngPtr, &rows[0], height);
-    png_write_end(pngPtr, infoPtr);
-    png_destroy_write_struct(&pngPtr, &infoPtr);
-    // Return created encoded image as a buffer.
-    info.GetReturnValue().Set(Nan::NewBuffer(reinterpret_cast<char*>(&encoded[0]), encodedSize).ToLocalChecked());
+    png_write_end(pngPtr, nullptr);
+    // Return created encoded image as a buffer. Needs to be a copy as the vector from above will be freed.
+    info.GetReturnValue().Set(Nan::CopyBuffer(reinterpret_cast<char*>(&encoded[0]), encoded.size()).ToLocalChecked());
 }
 
 NAN_MODULE_INIT(InitEncode) {

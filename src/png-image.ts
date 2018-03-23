@@ -1,3 +1,4 @@
+import { encode } from "./encode";
 import { __native_PngImage } from "./native";
 
 /**
@@ -125,4 +126,28 @@ export class PngImage {
      * The buffer containing the data of the decoded image.
      */
     public get data(): Buffer { return this.nativePng.data; }
+
+    /**
+     * Will be `true` if the image's color type has an alpha channel and `false` otherwise.
+     */
+    public get alpha(): boolean {
+        switch (this.colorType) {
+            case ColorType.RGBA:
+            case ColorType.GRAY_ALPHA:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Will encode this image to a PNG buffer.
+     */
+    public encode(): Buffer {
+        const { alpha, width, height } = this;
+        if (this.colorType !== ColorType.RGB && this.colorType !== ColorType.RGBA) {
+            throw new Error("Can only encode images with RGB or RGBA color type.");
+        }
+        return encode(this.data, { width, height, alpha });
+    }
 }

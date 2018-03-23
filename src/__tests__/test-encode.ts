@@ -17,6 +17,6 @@ describe("encode", () => {
             height: 256,
             alpha: false,
         });
-        writeFileSync(`${__dirname}/test.png`, encoded);
+        expect(buffer.toString("hex")).toMatchSnapshot();
     });
 });
