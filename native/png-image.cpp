@@ -87,7 +87,7 @@ NAN_METHOD(PngImage::New) {
         PngImage* instance = new PngImage(pngPtr, infoPtr);
         instance->Wrap(info.This());
         // Store information about the read progres in a separate struct which will be handed into the read function.
-        ReadStruct readStruct{ .length = inputSize, .input = input, .consumed = 8 };
+        ReadStruct readStruct{ inputSize, input, 8 };
         // This callback will be called each time libpng requests a new chunk.
         png_set_read_fn(pngPtr, reinterpret_cast<png_voidp>(&readStruct), [] (png_structp passedStruct, png_bytep target, png_size_t length) {
             auto readStruct = reinterpret_cast<ReadStruct*>(png_get_io_ptr(passedStruct));
