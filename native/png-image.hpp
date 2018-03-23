@@ -26,20 +26,11 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_GETTER(getPixelsPerMeterY);
 
         // C++ only constructor and destructor.
-        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *input);
+        explicit PngImage(png_structp &pngPtr, png_infop &infoPtr);
         ~PngImage();
         // libpng pointers.
         png_structp pngPtr;
         png_infop infoPtr;
-        // Properties describing the input buffer to read.
-        uint32_t inputSize;
-        uint8_t *input;
-        uint32_t consumed;
-        // The decoded buffer.
-        png_bytep decoded;
-        std::vector<png_bytep> rows;
-        uint32_t decodedSize;
-        
 };
 
 #endif

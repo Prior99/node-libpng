@@ -11,18 +11,7 @@ using namespace std;
 
 Nan::Persistent<Function> constructor;
 
-PngImage::PngImage(png_structp &pngPtr, png_infop &infoPtr, uint32_t inputSize, uint8_t *input) :
-    pngPtr(pngPtr),
-    infoPtr(infoPtr),
-    // The amount of bytes in the input buffer.
-    inputSize(inputSize),
-    // Store the input buffer.
-    input(input),
-    // The header of the PNG file is 8 bytes long and needs to be skipped, hence initialize the `consumed` counter
-    // with 8.
-    consumed(8),
-    decoded(nullptr),
-    decodedSize(0) {}
+PngImage::PngImage(png_structp &pngPtr, png_infop &infoPtr) : pngPtr(pngPtr), infoPtr(infoPtr) {}
 
 PngImage::~PngImage() {}
 
@@ -32,7 +21,7 @@ NAN_MODULE_INIT(PngImage::Init) {
     auto ctor = Nan::New<FunctionTemplate>(PngImage::New);
     auto ctorInstance = ctor->InstanceTemplate();
     ctor->SetClassName(Nan::New("__native_PngImage").ToLocalChecked());
-    ctorInstance->SetInternalFieldCount(8);
+    ctorInstance->SetInternalFieldCount(2);
     // Hand over all getters defined on `PngImage` to node.
     Nan::SetAccessor(ctorInstance, Nan::New("bitDepth").ToLocalChecked(), PngImage::getBitDepth);
     Nan::SetAccessor(ctorInstance, Nan::New("channels").ToLocalChecked(), PngImage::getChannels);
@@ -50,6 +39,20 @@ NAN_MODULE_INIT(PngImage::Init) {
     // Store `NativePngImage` in the module's exports.
     Nan::Set(target, Nan::New("__native_PngImage").ToLocalChecked(), ctor->GetFunction());
 }
+
+/*
+ * This struct is used when reading (decoding) the PNG image into a raw buffer.
+ * It stores information about the data which should be read and how much data has already
+ * been consumed.
+ */
+struct ReadStruct {
+    // The total size of `input`.
+    uint32_t length;
+    // The pointer to the raw PNG data.
+    uint8_t *input;
+    // The amount of bytes which have already been read.
+    uint32_t consumed;
+};
 
 NAN_METHOD(PngImage::New) {
     if (info.IsConstructCall()) {
@@ -81,13 +84,15 @@ NAN_METHOD(PngImage::New) {
             return;
         }
         // Create instance of `PngImage`.
-        PngImage* instance = new PngImage(pngPtr, infoPtr, inputSize, input);
+        PngImage* instance = new PngImage(pngPtr, infoPtr);
         instance->Wrap(info.This());
+        // Store information about the read progres in a separate struct which will be handed into the read function.
+        ReadStruct readStruct{ .length = inputSize, .input = input, .consumed = 8 };
         // This callback will be called each time libpng requests a new chunk.
-        png_set_read_fn(pngPtr, reinterpret_cast<png_voidp>(instance), [] (png_structp passedStruct, png_bytep target, png_size_t length) {
-            auto pngImage = reinterpret_cast<PngImage*>(png_get_io_ptr(passedStruct));
-            memcpy(reinterpret_cast<uint8_t*>(target), pngImage->input + pngImage->consumed, length);
-            pngImage->consumed += length;
+        png_set_read_fn(pngPtr, reinterpret_cast<png_voidp>(&readStruct), [] (png_structp passedStruct, png_bytep target, png_size_t length) {
+            ReadStruct *readStruct = reinterpret_cast<ReadStruct*>(png_get_io_ptr(passedStruct));
+            memcpy(reinterpret_cast<uint8_t*>(target), readStruct->input + readStruct->consumed, length);
+            readStruct->consumed += length;
         });
         // Tell libpng that the initial 8 bytes for the header have already been read.
         png_set_sig_bytes(pngPtr, 8);
@@ -96,23 +101,22 @@ NAN_METHOD(PngImage::New) {
 
         auto rowCount = png_get_image_height(pngPtr, infoPtr);
         auto rowBytes = png_get_rowbytes(pngPtr, infoPtr);
-        instance->decodedSize = rowBytes * rowCount;
+        auto decodedSize = rowBytes * rowCount;
         // A vector is used to address each row of the image inside the 1-dimensional `decoded` array.
         // Resize the vector to the amount of rows used, assigning each row to `nullptr`.
-        instance->rows.resize(rowCount, nullptr);
-        instance->decoded = new png_byte[instance->decodedSize];
+        vector<png_bytep> rows;
+        rows.resize(rowCount, nullptr);
+        // Initialize the array into which the decoded data will be written.
+        // This array will be handed to a `Buffer` instance which will take care of freeing the memory.
+        auto decoded = new png_byte[decodedSize];
         // Iterate over every row, and assign the pointer inside the `decoded` array to the element in the vector.
         // This way each element in the vector points to the beginning of the 2-dimensional row inside the 1-dimensional array.
         for(size_t row = 0; row < rowCount; ++row) {
-            instance->rows[row] = instance->decoded + row * rowBytes;
+            rows[row] = decoded + row * rowBytes;
         }
-        png_read_image(pngPtr, &instance->rows[0]);
-
-        // Nan::Persistent<Object> persistentHandle;
-        // persistentHandle.Reset()
-        // persistentHandle.MakeWeak();
-        Nan::Set(info.This(), Nan::New("data").ToLocalChecked(), Nan::NewBuffer(reinterpret_cast<char*>(instance->decoded), instance->decodedSize).ToLocalChecked());
-
+        png_read_image(pngPtr, &rows[0]);
+        // Store the created buffer on the object.
+        Nan::Set(info.This(), Nan::New("data").ToLocalChecked(), Nan::NewBuffer(reinterpret_cast<char*>(decoded), decodedSize).ToLocalChecked());
         // Set the return value of the call to the constructor to the newly created instance.
         info.GetReturnValue().Set(info.This());
     } else {
