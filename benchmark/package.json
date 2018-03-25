@@ -2,11 +2,11 @@
   "name": "node-libpng-benchmark",
   "version": "0.0.0",
   "description": "Benchmark for node-libpng.",
-  "main": "benchmar.js",
+  "main": "src/index.js",
   "author": "Frederick Gnodtke",
   "license": "MIT",
   "scripts": {
-    "start": "node benchmark.js"
+    "start": "node src"
   },
   "devDependencies": {},
   "dependencies": {
