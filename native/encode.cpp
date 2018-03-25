@@ -23,7 +23,11 @@ NAN_METHOD(encode) {
     const auto colorType = alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     const auto rowBytes = (alpha ? 4 : 3) * width;
     // Create libpng write struct. Fail if unable to create.
-    png_structp pngPtr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    auto errorHandler = [] (png_structp pngPtr, png_const_charp message) {
+        Nan::ThrowError(message);
+    };
+    auto warningHandler = [] (png_structp pngPtr, png_const_charp message) {};
+    png_structp pngPtr = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, errorHandler, warningHandler);
     if (!pngPtr) {
         Nan::ThrowError("Unable to initialize libpng for writing.");
         return;
@@ -36,7 +40,7 @@ NAN_METHOD(encode) {
     }
     // libpng will jump to this if an error occured while reading.
     if (setjmp(png_jmpbuf(pngPtr))) {
-        Nan::ThrowTypeError("Error decoding PNG buffer.");
+        Nan::ThrowTypeError("Error encoding PNG.");
         return;
     }
     vector<uint8_t> encoded;

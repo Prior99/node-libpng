@@ -27,20 +27,35 @@ export interface EncodeOptions {
  * @return the encoded PNG as a new buffer.
  */
 export function encode(buffer: Buffer, options: EncodeOptions): Buffer {
+    if (!Buffer.isBuffer(buffer)) {
+        throw new Error("Input is not a buffer.");
+    }
+    if (typeof options !== "object" || options === null) {
+        throw new Error("Options need to be an object.");
+    }
     const { alpha } = options;
     const bytesPerPixel = alpha ? 4 : 3;
     let { width, height } = options;
     if (typeof width !== "number" && typeof height !== "number") {
         throw new Error("Error encoding PNG. Either width or height need to be specified.");
     }
+    if (typeof width === "number" && !Number.isInteger(width)) {
+        throw new Error("Error encoding PNG. Width needs to be an integer.");
+    }
+    if (typeof height === "number" && !Number.isInteger(height)) {
+        throw new Error("Error encoding PNG. Height needs to be an integer.");
+    }
     if (typeof alpha !== "boolean") {
         throw new Error("Error encoding PNG. Alpha channel needs to be explicitly specified.");
     }
-    if (typeof height === "undefined") {
+    if (typeof height !== "number") {
         height = buffer.length / (bytesPerPixel * width);
     }
-    if (typeof width === "undefined") {
+    if (typeof width !== "number") {
         width = buffer.length / (bytesPerPixel * height);
+    }
+    if (buffer.length !== height * width * bytesPerPixel) {
+        throw new Error("Error encoding PNG.Invalid buffer length.");
     }
     return __native_encode(buffer, width, height, alpha);
 }
@@ -68,7 +83,7 @@ export function writePngFile(
     options: EncodeOptions,
     callback?: ReadPngFileCallback,
 ): Promise<void> {
-    // Checl if the user provided a `callback`.
+    // Checlkif the user provided a `callback`.
     if (typeof callback === "function") {
         // Encode the buffer and call the `callback` with an error if an error occured.
         let encoded: Buffer;
