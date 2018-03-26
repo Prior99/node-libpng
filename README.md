@@ -51,11 +51,11 @@ This is a native Addon to NodeJS which delivers prebuilt binaries. Only some env
 
 Multiple ways of reading and decoding PNG encoded images exist:
 
- * [readPngFile](https://prior99.github.io/node-libpng/docs/globals.html#readpngfile) Reads a PNG file and returns a [PngImage](file:///home/prior/repositories/prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded data.
+ * [readPngFile](https://prior99.github.io/node-libpng/docs/globals.html#readpngfile) Reads a PNG file and returns a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded data.
     * The function can take an optional argument for using a node-style callback API. [Example](#reading-png-files-using-a-callback)
     * The function will return a Promise when not providing a callback. [Example](#reading-png-files-using-promises)
- * [readPngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#readpngfilesync) Will read a PNG file synchroneously and return a [PngImage](file:///home/prior/repositories/prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded image. [Example](#reading-png-files-synchroneously)
- * [decode](https://prior99.github.io/node-libpng/docs/globals.html#decode) Will decode a Buffer of raw PNG file data and return a [PngImage](file:///home/prior/repositories/prior99.github.io/node-libpng/docs/classes/pngimage.html) instance. [Example](#decoding-a-buffer)
+ * [readPngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#readpngfilesync) Will read a PNG file synchroneously and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded image. [Example](#reading-png-files-synchroneously)
+ * [decode](https://prior99.github.io/node-libpng/docs/globals.html#decode) Will decode a Buffer of raw PNG file data and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance. [Example](#decoding-a-buffer)
 
 #### Reading PNG files using Promises
 
@@ -90,7 +90,7 @@ function readMyFile() {
 ```
 
 If an error occured while reading the file or decoding the buffer, it will be passed as the first argument to the callback.
-Otherwise `null` will be passed. The [PngImage](file:///home/prior/repositories/prior99.github.io/node-libpng/docs/classes/pngimage.html) instance will be passed as the second argument. If an error occured,
+Otherwise `null` will be passed. The [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance will be passed as the second argument. If an error occured,
 it will be `undefined`.
 
 #### Reading PNG files synchroneously
@@ -110,7 +110,7 @@ If an error occured while reading the file or decoding the buffer, it will be `t
 
 #### Decoding a buffer
 
-Buffers can be decoded directly into a [PngImage](file:///home/prior/repositories/prior99.github.io/node-libpng/docs/classes/pngimage.html) instance:
+Buffers can be decoded directly into a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance:
 
 ```typescript
 import { decode } from "node-libpng";
