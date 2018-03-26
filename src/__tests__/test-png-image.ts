@@ -1,5 +1,6 @@
-import { PngImage } from "..";
 import { readFileSync } from "fs";
+import { PngImage } from "..";
+import { expectRedBlueGradient } from "./utils";
 
 describe("PngImage", () => {
     it("reads the info of a normal png file", () => {
@@ -19,19 +20,15 @@ describe("PngImage", () => {
         expect(image.pixelsPerMeterY).toBe(0);
     });
 
-    it("reads decodes a normal png file", () => {
+    it("decodes a normal png file", () => {
         const inputBuffer = readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`);
         const { data } = new PngImage(inputBuffer);
-        for (let i = 0; i < data.length; i += 3) {
-            // The image is of 256 pixel width.
-            const x = (i / 3) % 256;
-            const r = data[i + 0];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            // The image is a gradient from red (255, 0, 0) to blue (0, 0, 255).
-            expect(r).toBe(255 - x);
-            expect(g).toBe(0);
-            expect(b).toBe(x);
-        }
+        expectRedBlueGradient(data);
+    });
+
+    it("decodes a PNG file with ADAM7 interlacing", () => {
+        const inputBuffer = readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px-interlaced.png`);
+        const { data } = new PngImage(inputBuffer);
+        expectRedBlueGradient(data);
     });
 });
