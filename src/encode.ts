@@ -60,9 +60,14 @@ export function encode(buffer: Buffer, options: EncodeOptions): Buffer {
     return __native_encode(buffer, width, height, alpha);
 }
 
-export type ReadPngFileCallback = (error: Error) => void;
+export type WritePngFileCallback = (error: Error) => void;
 
-export function writePngFile(path: string, buffer: Buffer, options: EncodeOptions, callback: ReadPngFileCallback): void;
+export function writePngFile(
+    path: string,
+    buffer: Buffer,
+    options: EncodeOptions,
+    callback: WritePngFileCallback,
+): void;
 export function writePngFile(path: string, buffer: Buffer, options: EncodeOptions): Promise<void>;
 /**
  * Invoke `writePngFile` to asynchroneously write a raw buffer of pixel data as an encoded PNG image.
@@ -81,7 +86,7 @@ export function writePngFile(
     path: string,
     buffer: Buffer,
     options: EncodeOptions,
-    callback?: ReadPngFileCallback,
+    callback?: WritePngFileCallback,
 ): Promise<void> {
     // Checlkif the user provided a `callback`.
     if (typeof callback === "function") {

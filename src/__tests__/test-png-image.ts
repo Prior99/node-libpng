@@ -31,4 +31,32 @@ describe("PngImage", () => {
         const { data } = new PngImage(inputBuffer);
         expectRedBlueGradient(data);
     });
+
+    describe("export methods", () => {
+        const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/orange-rectangle.png`));
+
+        describe("encode", () => {
+            it("encodes a PNG file with the colortype being RGB", () => {
+                expect(somePngImage.encode().toString("hex")).toMatchSnapshot();
+            });
+        });
+
+        describe("write", () => {
+            it("writes a PNG file with the colortype being RGB", async () => {
+                const path = `${__dirname}/../../tmp-png-image-write.png`;
+                await somePngImage.write(path);
+                const fromDisk = readFileSync(path);
+                expect(fromDisk.toString("hex")).toMatchSnapshot();
+            });
+        });
+
+        describe("writeSync", () => {
+            it("writes a PNG file with the colortype being RGB", () => {
+                const path = `${__dirname}/../../tmp-png-image-write-sync.png`;
+                somePngImage.writeSync(path);
+                const fromDisk = readFileSync(path);
+                expect(fromDisk.toString("hex")).toMatchSnapshot();
+            });
+        });
+    });
 });

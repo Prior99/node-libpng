@@ -1,4 +1,4 @@
-import { encode } from "./encode";
+import { encode, writePngFile, writePngFileSync, WritePngFileCallback } from "./encode";
 import { __native_PngImage } from "./native";
 
 /**
@@ -152,5 +152,38 @@ export class PngImage {
             throw new Error("Can only encode images with RGB or RGBA color type.");
         }
         return encode(this.data, { width, height, alpha });
+    }
+
+    /**
+     * Will encode this image and write it to the file at the specified path.
+     *
+     * @param path Path to the file to which the encoded PNG should be written.
+     * @param callback An optional callback to use instead of the Promise API.
+     *
+     * @see writePngFile
+     *
+     * @return A Promise which resolves once the file is written or `undefined` if a callback was specified.
+     */
+    public write(path: string, callback?: WritePngFileCallback): Promise<void> | void {
+        const { alpha, width, height } = this;
+        if (this.colorType !== ColorType.RGB && this.colorType !== ColorType.RGBA) {
+            throw new Error("Can only encode images with RGB or RGBA color type.");
+        }
+        return writePngFile(path, this.data, { width, height, alpha }, callback);
+    }
+
+    /**
+     * Will encode this image and write it to the file at the specified path synchroneously.
+     *
+     * @param path Path to the file to which the encoded PNG should be written.
+     *
+     * @see writePngFileSync
+     */
+    public writeSync(path: string): void {
+        const { alpha, width, height } = this;
+        if (this.colorType !== ColorType.RGB && this.colorType !== ColorType.RGBA) {
+            throw new Error("Can only encode images with RGB or RGBA color type.");
+        }
+        return writePngFileSync(path, this.data, { width, height, alpha });
     }
 }
