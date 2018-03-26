@@ -39,7 +39,3 @@ exports[`encode throws an error with bad options undefined 1`] = `"Options need 
 exports[`writePngFile using the Promise API rejects with an error when encoding failed 1`] = `[TypeError: Error encoding PNG.]`;
 
 exports[`writePngFile using the callback API calls the callback with an error when encoding failed 1`] = `[TypeError: Error encoding PNG.]`;
-
-exports[`writePngFile using the callback API calls the callback with an error when writing failed 1`] = `[Error: ENOENT: no such file or directory, open 'this-file/does/not/exist.png']`;
-
-exports[`writePngFile using the callback API encodes a PNG and writes it to disk 1`] = `[Error: ENOENT: no such file or directory, open 'this-file/does/not/exist.png']`;

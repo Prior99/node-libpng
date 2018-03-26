@@ -47,7 +47,7 @@ describe("readPngFile", () => {
         });
 
         it("rejects with an error when reading failed", async () => {
-            return expect(readPngFile(`this-file/does/not/exist.png`)).rejects.toMatchSnapshot();
+            return expect(readPngFile(`this-file/does/not/exist.png`)).rejects.toBeTruthy();
         });
     });
 
@@ -69,7 +69,7 @@ describe("readPngFile", () => {
 
         it("calls the callback with an error when reading failed", done => {
             readPngFile(`this-file/does/not/exist.png`, (error, pngImg) => {
-                expect(error).toMatchSnapshot();
+                expect(error).toBeTruthy();
                 done();
             });
         });

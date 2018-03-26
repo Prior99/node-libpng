@@ -1,6 +1,6 @@
 {
   "name": "node-libpng",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
@@ -22,11 +22,13 @@
   },
   "files": [
     "dist",
-    "index.d.ts",
+    "docs",
+    "images",
+    "scripts",
     "src",
+    "index.d.ts",
     "LICENSE",
-    "README.md",
-    "example"
+    "README.md"
   ],
   "jest": {
     "collectCoverage": true,
