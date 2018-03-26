@@ -273,7 +273,7 @@ NAN_GETTER(PngImage::getTime) {
     auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
     png_timep time;
     // If no time information is available in the header, simply return `undefined`.
-    if (png_get_tIME(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &time) == 0) {
+    if (png_get_time(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &time) == 0) {
         info.GetReturnValue().Set(Nan::Undefined());
         return;
     }
@@ -317,4 +317,20 @@ NAN_GETTER(PngImage::getBackgroundColor) {
             break;
     }
     info.GetReturnValue().Set(returnValue);
+}
+
+NAN_GETTER(PngImage::getPalette) {
+    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
+    png_colorp colors;
+    int colorCount;
+    // If no time information is available in the header, simply return `undefined`.
+    if (png_get_PLTE(pngimageinstance->pngptr, pngimageinstance->infoptr, &colors, &colorCount) == 0) {
+        info.GetReturnValue().Set(Nan::Undefined());
+        return;
+    }
+    Local<Array> palette = Nan::New<Array>(colorCount);
+    for (auto i = 0; i < colorCount; ++i) {
+        // TODO: Move logic from method above into function, convert color to object and add to array, return array.
+        Nan::Set(palette, i, Nan::New())
+    }
 }

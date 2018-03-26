@@ -1,4 +1,16 @@
 import { encode, writePngFile, writePngFileSync, WritePngFileCallback } from "./encode";
+import {
+    colorRGB,
+    ColorRGB,
+    colorRGBA,
+    ColorRGBA,
+    colorGrayScale,
+    ColorGrayScale,
+    colorGrayScaleA,
+    ColorGrayScaleA,
+    colorPalette,
+    ColorPalette,
+} from "./colors";
 import { __native_PngImage } from "./native";
 
 /**
@@ -143,6 +155,22 @@ export class PngImage {
         }
     }
 
+    public get bytesPerPixel(): number {
+        switch (this.colorType) {
+            case ColorType.GRAY_ALPHA:
+                return 2;
+            case ColorType.RGBA:
+                return 4;
+            case ColorType.GRAY:
+            case ColorType.PALETTE:
+                return 1;
+            case ColorType.RGB:
+                return 3;
+            default:
+                return undefined;
+        }
+    }
+
     /**
      * Returns the last modification time as returned by `png_get_tIME`.
      */
@@ -151,8 +179,50 @@ export class PngImage {
         return new Date(year, month, day, hour, minute, second);
     }
 
-    public get backgroundColor(): ColorRGB {
-        
+    public get backgroundColor(): ColorRGB | ColorGrayScale | ColorPalette {
+        const color = this.nativePng.backgroundColor;
+        switch (this.colorType) {
+            case ColorType.GRAY:
+            case ColorType.GRAY_ALPHA:
+                return colorGrayScale(color.gray);
+            case ColorType.PALETTE:
+                return colorPalette(color.index);
+            case ColorType.RGB:
+            case ColorType.RGBA:
+                return colorRGB(color.r, color.g, color.b);
+            default:
+                return undefined;
+        }
+    }
+
+    public toIndex(x: number, y: number) {
+        return (x + y * this.rowBytes);
+    }
+
+    public toXY(index: number) {
+        const colorIndex = index / this.bytesPerPixel;
+        const x = Math.floor(colorIndex % this.width);
+        const y = Math.floor(colorIndex / this.width);
+        return [x, y];
+    }
+
+    public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleA | ColorPalette  {
+        const index = this.toIndex(x, y);
+        const { data } = this;
+        switch (this.colorType) {
+            case ColorType.GRAY:
+                return colorGrayScale(data[index]);
+            case ColorType.GRAY_ALPHA:
+                return colorGrayScaleA(data[index], data[index + 1]);
+            case ColorType.PALETTE:
+                return colorPalette(data[index]);
+            case ColorType.RGB:
+                return colorRGB(data[index], data[index + 1], data[index + 2]);
+            case ColorType.RGBA:
+                return colorRGBA(data[index], data[index + 1], data[index + 2], data[index + 3]);
+            default:
+                return undefined;
+        }
     }
 
     /**
