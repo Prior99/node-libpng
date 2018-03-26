@@ -30,10 +30,6 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
        * [Write access (Encoding)](#write-access-encoding)
        * [Pixel access](#pixel-access)
     * [Contributing](#contributing)
-       * [Building](#building)
-       * [Running the tests with coverage](#running-the-tests-with-coverage)
-       * [Linting](#linting)
-       * [Starting the example](#starting-the-example)
        * [Generating the libpng config](#generating-the-libpng-config)
     * [Contributors](#contributors)
 
@@ -288,47 +284,14 @@ The time to fully access every pixel in the raw data is measured (Higher is bett
 
 Yarn is used instead of npm, so make sure it is installed, probably: `npm install -g yarn`.
 
-Install all dependencies using
+Generally, it should be enough to just run:
 
 ```
-yarn install
+make
 ```
 
-### Building
-
-In order to build the code:
-
-```
-yarn build
-```
-
-### Running the tests with coverage
-
-```
-yarn test
-```
-
-### Linting
-
-```
-yarn lint
-```
-
-### Starting the example
-
-Server:
-
-```
-cd exmaple
-yarn run:server
-```
-
-Client:
-
-```
-cd exmaple
-yarn run:client
-```
+which will install all node dependencies, compile the dependencies and C++ code,
+compile typescript, execute all test, lint the sources and build the docs.
 
 ### Generating the libpng config
 
