@@ -38,7 +38,7 @@
       "^.+\\.(ts)$": "ts-jest"
     },
     "testMatch": [
-      "**/__tests__/*.(ts|js)"
+      "**/__tests__/test-*.(ts|js)"
     ],
     "moduleDirectories": [
       "node_modules",

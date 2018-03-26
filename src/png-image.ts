@@ -54,6 +54,9 @@ export class PngImage {
     private nativePng: any;
 
     constructor(buffer: Buffer) {
+        if (!Buffer.isBuffer(buffer)) {
+            throw new Error("Error decoding PNG. Input is not a buffer.");
+        }
         this.nativePng = new __native_PngImage(buffer);
     }
 

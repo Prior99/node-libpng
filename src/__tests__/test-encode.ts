@@ -11,19 +11,19 @@ for (let x = 0; x < 256; ++x) {
     }
 }
 
-const someOrangeRectangle = Buffer.alloc(16 * 16 * 3);
+const someOrangeRectangle = Buffer.alloc(16 * 8 * 3);
 for (let index = 0; index < someOrangeRectangle.length; index += 3) {
     someOrangeRectangle[index + 0] = 255;
     someOrangeRectangle[index + 1] = 128;
     someOrangeRectangle[index + 2] = 64;
 }
 
-const someOpaqueRectangle = Buffer.alloc(16 * 16 * 4);
-for (let index = 0; index < someOpaqueRectangle.length; index += 4) {
-    someOpaqueRectangle[index + 0] = 64;
-    someOpaqueRectangle[index + 1] = 128;
-    someOpaqueRectangle[index + 2] = 64;
-    someOpaqueRectangle[index + 3] = 128;
+const someOpaqueSquare = Buffer.alloc(16 * 16 * 4);
+for (let index = 0; index < someOpaqueSquare.length; index += 4) {
+    someOpaqueSquare[index + 0] = 64;
+    someOpaqueSquare[index + 1] = 128;
+    someOpaqueSquare[index + 2] = 64;
+    someOpaqueSquare[index + 3] = 128;
 }
 
 describe("encode", () => {
@@ -37,7 +37,7 @@ describe("encode", () => {
     });
 
     it("encodes a png with an alpha channel", () => {
-        const encoded = encode(someOpaqueRectangle, {
+        const encoded = encode(someOpaqueSquare, {
             width: 16,
             height: 16,
             alpha: true,
@@ -60,7 +60,7 @@ describe("encode", () => {
             height: 16,
             alpha: false,
         };
-        expect(() => encode(someOpaqueRectangle, options)).toThrowErrorMatchingSnapshot();
+        expect(() => encode(someOpaqueSquare, options)).toThrowErrorMatchingSnapshot();
     });
 
     [
@@ -69,12 +69,12 @@ describe("encode", () => {
             alpha: false,
         },
         {
-            height: 16,
+            height: 8,
             alpha: false,
         },
         {
             width: 16,
-            height: 16,
+            height: 8,
             alpha: false,
         },
     ].forEach(options => {
@@ -151,13 +151,13 @@ describe("writePngFile", () => {
         it("rejects with an error when encoding failed", async () => {
             const options = { width: 16, alpha: false };
             const path = `${__dirname}/../../tmp-write-promise-error-encoding.png`;
-            return expect(writePngFile(path, Buffer.alloc(2), options)).rejects.toMatchSnapshot();
+            expect(writePngFile(path, Buffer.alloc(2), options)).rejects.toMatchSnapshot();
         });
 
         it("rejects with an error when writing failed", async () => {
             const options = { width: 16, alpha: false };
             const path = `${__dirname}/this-file/does/not/exist.png`;
-            return expect(writePngFile(path, someOrangeRectangle, options)).rejects.toMatchSnapshot();
+            expect(writePngFile(path, someOrangeRectangle, options)).rejects.toMatchSnapshot();
         });
     });
 
