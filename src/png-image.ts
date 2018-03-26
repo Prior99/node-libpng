@@ -144,6 +144,18 @@ export class PngImage {
     }
 
     /**
+     * Returns the last modification time as returned by `png_get_tIME`.
+     */
+    public get time(): Date {
+        const { year, month, day, hour, minute, second } = this.nativePng.time;
+        return new Date(year, month, day, hour, minute, second);
+    }
+
+    public get backgroundColor(): ColorRGB {
+        
+    }
+
+    /**
      * Will encode this image to a PNG buffer.
      */
     public encode(): Buffer {
