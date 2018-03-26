@@ -4,8 +4,8 @@ exports[`decode throws an error when trying to decode something which isn't a bu
 
 exports[`readPngFile using the Promise API rejects with an error when decoding failed 1`] = `[TypeError: Invalid PNG buffer.]`;
 
-exports[`readPngFile using the Promise API rejects with an error when reading failed 1`] = `[Error: ENOENT: no such file or directory, open '/home/prior/repositories/node-libpng/src/__tests__/this-file/does/not/exist.png']`;
+exports[`readPngFile using the Promise API rejects with an error when reading failed 1`] = `[Error: ENOENT: no such file or directory, open 'this-file/does/not/exist.png']`;
 
 exports[`readPngFile using the callback API calls the callback with an error when decoding failed 1`] = `[TypeError: Invalid PNG buffer.]`;
 
-exports[`readPngFile using the callback API calls the callback with an error when reading failed 1`] = `[Error: ENOENT: no such file or directory, open '/home/prior/repositories/node-libpng/src/__tests__/this-file/does/not/exist.png']`;
+exports[`readPngFile using the callback API calls the callback with an error when reading failed 1`] = `[Error: ENOENT: no such file or directory, open 'this-file/does/not/exist.png']`;

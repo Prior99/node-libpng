@@ -156,7 +156,7 @@ describe("writePngFile", () => {
 
         it("rejects with an error when writing failed", async () => {
             const options = { width: 16, alpha: false };
-            const path = `${__dirname}/this-file/does/not/exist.png`;
+            const path = `this-file/does/not/exist.png`;
             expect(writePngFile(path, someOrangeRectangle, options)).rejects.toMatchSnapshot();
         });
     });
@@ -185,7 +185,7 @@ describe("writePngFile", () => {
 
         it("calls the callback with an error when writing failed", done => {
             const options = { width: 16, alpha: false };
-            const path = `${__dirname}/this-file/does/not/exist.png`;
+            const path = `this-file/does/not/exist.png`;
             writePngFile(path, someOrangeRectangle, options, error => {
                 expect(error).toMatchSnapshot();
                 done();

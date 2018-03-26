@@ -14,9 +14,9 @@ const destination = fs.createWriteStream(fileName.qualifiedName);
 
 request.get(url)
     .on("error", err => {
-        console.log(err);
+        throw new Error(err);
         fs.unlink(fileName.qualifiedName);
-        console.error("Unable to download binaries for node-libpng.");
+        throw new Error("Unable to download binaries for node-libpng.");
     })
     .on("response", response => {
         if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -28,9 +28,9 @@ request.get(url)
             return;
         }
         if (response.statusCode === 404) {
-            console.error(`No supported node-libpng ${packageVersion} build found for node ${process.version} on ${process.platform} (${process.arch}).`);
+            throw new Error(`No supported node-libpng ${packageVersion} build found for node ${process.version} on ${process.platform} (${process.arch}).`);
         } else {
-            console.error(`Error downloading binaries for node-libpng ${packageVersion}. Received status code ${response.statusCode}`)
+            throw new Error(`Error downloading binaries for node-libpng ${packageVersion}. Received status code ${response.statusCode}`)
         }
         destination.close();
         fs.unlink(fileName.qualifiedName);
