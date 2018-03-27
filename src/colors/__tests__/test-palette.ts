@@ -1,5 +1,6 @@
-import { colorPalette, isColorPalette } from "../palette";
+import { colorPalette, isColorPalette, convertPaletteToRGBA } from "../palette";
 import { colorGrayScale } from "../gray-scale";
+import { colorRGB, ColorRGB } from "../rgb";
 
 describe("The utilities for palette colors", () => {
     it("creates a gray scale alpha color", () => {
@@ -29,5 +30,11 @@ describe("The utilities for palette colors", () => {
         it("detects a correct input as true", () => {
             expect(isColorPalette(colorPalette(4))).toBe(true);
         });
+    });
+
+    it("convert to RGBA", () => {
+        const palette = new Map<number, ColorRGB>();
+        palette.set(2, colorRGB(100, 90, 80));
+        expect(convertPaletteToRGBA(colorPalette(2), palette)).toEqual([100, 90, 80, 0]);
     });
 });

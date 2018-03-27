@@ -107,28 +107,33 @@ describe("PngImage", () => {
             colorType: ColorType.GRAY_SCALE,
             file: `${__dirname}/fixtures/grayscale-gradient-16px.png`,
             checker: isColorGrayScale,
+            rgbaColor: [85, 85, 85, 0],
         },
         {
             colorType: ColorType.GRAY_SCALE_ALPHA,
             file: `${__dirname}/fixtures/grayscale-alpha-gradient-16px.png`,
             checker: isColorGrayScaleAlpha,
+            rgbaColor: [85, 85, 85, 127],
         },
         {
             colorType: ColorType.RGB,
             file: `${__dirname}/fixtures/orange-rectangle.png`,
             checker: isColorRGB,
+            rgbaColor: [255, 128, 64, 0],
         },
         {
             colorType: ColorType.RGBA,
             file: `${__dirname}/fixtures/opaque-rectangle.png`,
             checker: isColorRGBA,
+            rgbaColor: [255, 128, 64, 127],
         },
         {
             colorType: ColorType.PALETTE,
             file: `${__dirname}/fixtures/indexed-16px.png`,
             checker: isColorPalette,
+            rgbaColor: [255, 64, 128, 0],
         },
-    ].forEach(({ colorType, file, checker }) => {
+    ].forEach(({ colorType, file, checker, rgbaColor }) => {
         it(`detects the correct color with an image of color type ${colorType}`, () => {
             const inputBuffer = readFileSync(file);
             const image = new PngImage(inputBuffer);
@@ -136,6 +141,14 @@ describe("PngImage", () => {
             const color = image.at(10, 10);
             expect(checker(color)).toBe(true);
             expect(color).toMatchSnapshot();
+        });
+
+        it(`reads the correct in rgba format with an image of color type ${colorType}`, () => {
+            const inputBuffer = readFileSync(file);
+            const image = new PngImage(inputBuffer);
+            expect(image.colorType).toBe(colorType);
+            const color = image.rgbaAt(10, 10);
+            expect(color).toEqual(rgbaColor);
         });
     });
 

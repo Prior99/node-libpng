@@ -11,6 +11,7 @@ import {
     colorPalette,
     ColorPalette,
     Palette,
+    convertToRGBA,
 } from "./colors";
 import { xy, XY } from "./xy";
 import { __native_PngImage } from "./native";
@@ -225,6 +226,11 @@ export class PngImage {
 
     /**
      * Retrieves the color in the image's color format at the specified position.
+     *
+     * @param x The x position of the pixel in the image of which to retrieve the color.
+     * @param y The y position of the pixel in the image of which to retrieve the color.
+     *
+     * @return The color at the given pixel in the image's color format.
      */
     public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleAlpha | ColorPalette  {
         const index = this.toIndex(x, y);
@@ -243,6 +249,20 @@ export class PngImage {
             default:
                 return undefined;
         }
+    }
+
+    /**
+     * Retrieves the color in rgba format, converting from the image's color format.
+     * This will automatically convert from indexed or grayscale images to rgba. If
+     * the image's color format doesn't provide an alpha channel, `0` is returned as alpha.
+     *
+     * @param x The x position of the pixel in the image of which to retrieve the color.
+     * @param y The y position of the pixel in the image of which to retrieve the color.
+     *
+     * @return The color at the given pixel in rgba format.
+     */
+    public rgbaAt(x: number, y: number): ColorRGBA {
+        return convertToRGBA(this.at(x, y), this.palette);
     }
 
     /**

@@ -1,4 +1,4 @@
-import { colorGrayScale, isColorGrayScale } from "../gray-scale";
+import { colorGrayScale, isColorGrayScale, convertGrayScaleToRGBA } from "../gray-scale";
 import { colorPalette } from "../palette";
 
 describe("The utilities for gray scale colors", () => {
@@ -29,5 +29,9 @@ describe("The utilities for gray scale colors", () => {
         it("detects a correct input as true", () => {
             expect(isColorGrayScale(colorGrayScale(128))).toBe(true);
         });
+    });
+
+    it("convert to RGBA", () => {
+        expect(convertGrayScaleToRGBA(colorGrayScale(100))).toEqual([100, 100, 100, 0]);
     });
 });

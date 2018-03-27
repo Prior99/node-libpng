@@ -1,3 +1,5 @@
+import { ColorRGBA, colorRGBA } from "./rgba";
+
 /**
  * Represents a color of color type `ColorType.GRAY_SCALE_A`.
  *
@@ -33,4 +35,15 @@ export function isColorGrayScaleAlpha(color: any): color is ColorGrayScaleAlpha 
     if (typeof (color as any).gray !== "number") { return false; }
     if (typeof (color as any).a !== "number") { return false; }
     return true;
+}
+
+/**
+ * Converts a color of type `ColorGrayScaleAlpha` to `ColorRGBA`.
+ *
+ * @param color The color to convert.
+ *
+ * @return The converted color in rgba format.
+ */
+export function convertGrayScaleAlphaToRGBA(grayScaleAlpha: ColorGrayScaleAlpha): ColorRGBA {
+    return colorRGBA(grayScaleAlpha.gray, grayScaleAlpha.gray, grayScaleAlpha.gray, grayScaleAlpha.a);
 }

@@ -1,4 +1,4 @@
-import { colorGrayScaleAlpha, isColorGrayScaleAlpha } from "../gray-scale-alpha";
+import { colorGrayScaleAlpha, isColorGrayScaleAlpha, convertGrayScaleAlphaToRGBA } from "../gray-scale-alpha";
 import { colorRGB } from "../rgb";
 
 describe("The utilities for gray scale alpha colors", () => {
@@ -30,5 +30,9 @@ describe("The utilities for gray scale alpha colors", () => {
         it("detects a correct input as true", () => {
             expect(isColorGrayScaleAlpha(colorGrayScaleAlpha(128, 128))).toBe(true);
         });
+    });
+
+    it("convert to RGBA", () => {
+        expect(convertGrayScaleAlphaToRGBA(colorGrayScaleAlpha(100, 20))).toEqual([100, 100, 100, 20]);
     });
 });
