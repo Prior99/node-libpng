@@ -273,7 +273,7 @@ NAN_GETTER(PngImage::getTime) {
     auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
     png_timep time;
     // If no time information is available in the header, simply return `undefined`.
-    if (png_get_time(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &time) == 0) {
+    if (png_get_tIME(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &time) == 0) {
         info.GetReturnValue().Set(Nan::Undefined());
         return;
     }
