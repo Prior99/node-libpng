@@ -25,6 +25,9 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
            * [Writing PNG files using a callback](#writing-png-files-using-a-callback)
            * [Writing PNG files synchroneously](#writing-png-files-synchroneously)
            * [Encoding into a Buffer](#encoding-into-a-buffer)
+        * [Accessing the pixels](#accessing-the-pixels)
+           * [Accessing in the image's color format](#accessing-in-the-images-color-format)
+           * [Accessing in rgba format](#accessing-in-rgba-format)
     * [Benchmark](#benchmark)
        * [Read access (Decoding)](#read-access-decoding)
        * [Write access (Encoding)](#write-access-encoding)
@@ -248,6 +251,65 @@ function encodeMyBuffer() {
 
 If an error occured while encoding the buffer, it will be `throw`n.
 The encoding happens synchroneously.
+
+### Accessing the pixels
+
+PNG specifies five different types of colors:
+
+ * [Gray Scale](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale)
+ * [Gray Scale with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale_alpha)
+ * [Palette (Indexed)](https://prior99.github.io/node-libpng/docs/enums/colortype.html#palette)
+ * [RGB](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgb)
+ * [RGB with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgba)
+
+In the [PngImage.data](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#data) buffer the colors are stored
+the way they were encoded in the PNG image. This library provides utilities for accessing the pixels in both the native format
+as well as rgba format.
+
+#### Accessing in the image's color format
+
+In order to retrieve the color in the image's native format at a given position [PngImage.at](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#at)
+can be used.
+
+##### Example for a gray scale image
+
+```typescript
+import { readPngFileSync } from "node-libpng";
+
+const image = readPngFileSync("path/to/grayscale-image.png");
+const color = image.at(10, 10);
+const colorType = image.colorType;
+// Will log: "The color type of the image is gray-scale. Pixel at 10,10 is of color 168."
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+```
+
+##### Example for a rgb image:
+
+```typescript
+const image = readPngFileSync("path/to/rgb-image.png");
+const color = image.at(10, 10);
+const colorType = image.colorType;
+// Will log: "The color type of the image is rgb. Pixel at 10,10 is of color 100, 150, 200."
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+```
+Dealing with all of these different color formats can be quite irritating. A set of conversion utilities as for example
+a utility for converting any color format to rgba ([convertToRGBA](https://prior99.github.io/node-libpng/docs/globals.html#converttorgba)) exist.
+
+[It is also possible to do this automatically](#accessing-in-rgba-format).
+
+#### Accessing in rgba format
+
+A method for retrieving the automatically converted color exists: [PngImage.rgbaAt](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#rgbaat).
+
+It will convert any color into rgba format. Unlike [other implementations](https://www.npmjs.com/package/pngjs#pngjs), all color formats are supported.
+
+```typescript
+const image = readPngFileSync("path/to/any-color-format-image.png");
+const color = image.rgbaAt(10, 10);
+const colorType = image.colorType;
+// Will log: "The color type of the image is palette. Pixel at 10,10 is of color 100, 150, 200, 0."
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+```
 
 ## Benchmark
 
