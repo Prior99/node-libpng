@@ -60,7 +60,7 @@ describe("PngImage", () => {
     it("reads the time of an image with the time specified in the header", () => {
         const inputBuffer = readFileSync(`${__dirname}/fixtures/orange-rectangle-time.png`);
         const { time } = new PngImage(inputBuffer);
-        expect(time).toEqual(new Date("2018-04-26T03:28:16.000Z"));
+        expect(time).toEqual(new Date("2018-04-26T05:28:16.000Z"));
     });
 
     it("reads the gamma value of an image with the gamma value specified in the header", () => {
