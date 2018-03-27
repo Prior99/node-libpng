@@ -25,12 +25,16 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_GETTER(getPixelsPerMeterX);
         static NAN_GETTER(getPixelsPerMeterY);
         static NAN_METHOD(encode);
-        static NAN_METHOD(getTime);
-        static NAN_METHOD(getBackgroundColor);
+        static NAN_GETTER(getTime);
+        static NAN_GETTER(getBackgroundColor);
+        static NAN_GETTER(getPalette);
 
         // C++ only constructor and destructor.
         explicit PngImage(png_structp &pngPtr, png_infop &infoPtr);
         ~PngImage();
+        // Internal methods.
+        v8::Local<v8::Object> convertColor(png_color_16p color);
+        v8::Local<v8::Object> convertColor(png_colorp color);
         // libpng pointers.
         png_structp pngPtr;
         png_infop infoPtr;

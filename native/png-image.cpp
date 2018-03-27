@@ -36,6 +36,7 @@ NAN_MODULE_INIT(PngImage::Init) {
     Nan::SetAccessor(ctorInstance, Nan::New("pixelsPerMeterY").ToLocalChecked(), PngImage::getPixelsPerMeterY);
     Nan::SetAccessor(ctorInstance, Nan::New("time").ToLocalChecked(), PngImage::getTime);
     Nan::SetAccessor(ctorInstance, Nan::New("backgroundColor").ToLocalChecked(), PngImage::getBackgroundColor);
+    Nan::SetAccessor(ctorInstance, Nan::New("palette").ToLocalChecked(), PngImage::getPalette);
     // Make sure the constructor stays persisted by storing it in a `Nan::Persistant`.
     constructor.Reset(ctor->GetFunction());
     // Store `NativePngImage` in the module's exports.
@@ -175,10 +176,10 @@ NAN_GETTER(PngImage::getBitDepth) {
 static string convertColorType(const png_byte &colorType) {
     switch (colorType) {
         case PNG_COLOR_TYPE_PALETTE: return "palette";
-        case PNG_COLOR_TYPE_GRAY: return "gray";
-        case PNG_COLOR_TYPE_GRAY_ALPHA: return "gray-alpha";
+        case PNG_COLOR_TYPE_GRAY: return "gray-scale";
+        case PNG_COLOR_TYPE_GRAY_ALPHA: return "gray-scale-alpha";
         case PNG_COLOR_TYPE_RGB: return "rgb";
-        case PNG_COLOR_TYPE_RGB_ALPHA: return "rgb-alpha";
+        case PNG_COLOR_TYPE_RGB_ALPHA: return "rgba";
         default: return "unknown";
     }
 }
@@ -279,13 +280,42 @@ NAN_GETTER(PngImage::getTime) {
     }
     // Copy the struct into a JS object.
     Local<Object> returnValue = Nan::New<Object>();
-    returnValue->Set(Nan::New("year").ToLocalChecked(), static_cast<double>(time->year));
-    returnValue->Set(Nan::New("month").ToLocalChecked(), static_cast<double>(time->month));
-    returnValue->Set(Nan::New("day").ToLocalChecked(), static_cast<double>(time->day));
-    returnValue->Set(Nan::New("hour").ToLocalChecked(), static_cast<double>(time->hour));
-    returnValue->Set(Nan::New("minute").ToLocalChecked(), static_cast<double>(time->minute));
-    returnValue->Set(Nan::New("second").ToLocalChecked(), static_cast<double>(time->second));
+    returnValue->Set(Nan::New("year").ToLocalChecked(), Nan::New(static_cast<double>(time->year)));
+    returnValue->Set(Nan::New("month").ToLocalChecked(), Nan::New(static_cast<double>(time->month)));
+    returnValue->Set(Nan::New("day").ToLocalChecked(), Nan::New(static_cast<double>(time->day)));
+    returnValue->Set(Nan::New("hour").ToLocalChecked(), Nan::New(static_cast<double>(time->hour)));
+    returnValue->Set(Nan::New("minute").ToLocalChecked(), Nan::New(static_cast<double>(time->minute)));
+    returnValue->Set(Nan::New("second").ToLocalChecked(), Nan::New(static_cast<double>(time->second)));
     info.GetReturnValue().Set(returnValue);
+}
+
+Local<Object> PngImage::convertColor(png_color_16p color) {
+    // Copy the struct into a JS object, taking only valid color information into account.
+    Local<Object> convertedColor = Nan::New<Object>();
+    switch (png_get_color_type(this->pngPtr, this->infoPtr)) {
+        case PNG_COLOR_TYPE_PALETTE:
+            convertedColor->Set(Nan::New("index").ToLocalChecked(), Nan::New(static_cast<double>(color->index)));
+            break;
+        case PNG_COLOR_TYPE_GRAY:
+        case PNG_COLOR_TYPE_GRAY_ALPHA:
+            convertedColor->Set(Nan::New("gray").ToLocalChecked(), Nan::New(static_cast<double>(color->gray)));
+            break;
+        case PNG_COLOR_TYPE_RGB:
+        case PNG_COLOR_TYPE_RGB_ALPHA:
+            convertedColor->Set(Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
+            convertedColor->Set(Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
+            convertedColor->Set(Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
+            break;
+    }
+    return convertedColor;
+}
+
+Local<Object> PngImage::convertColor(png_colorp color) {
+    Local<Object> convertedColor = Nan::New<Object>();
+    convertedColor->Set(Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
+    convertedColor->Set(Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
+    convertedColor->Set(Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
+    return convertedColor;
 }
 
 /**
@@ -299,24 +329,7 @@ NAN_GETTER(PngImage::getBackgroundColor) {
         info.GetReturnValue().Set(Nan::Undefined());
         return;
     }
-    // Copy the struct into a JS object, taking only valid color information into account.
-    Local<Object> returnValue = Nan::New<Object>();
-    switch (png_get_color_type(pngImageInstance->pngPtr, pngImageInstance->infoPtr)) {
-        case PNG_COLOR_TYPE_PALETTE:
-            returnValue->Set(Nan::New("index").ToLocalChecked(), static_cast<double>(color->index));
-            break;
-        case PNG_COLOR_TYPE_GRAY:
-        case PNG_COLOR_TYPE_GRAY_ALPHA:
-            returnValue->Set(Nan::New("gray").ToLocalChecked(), static_cast<double>(color->gray));
-            break;
-        case PNG_COLOR_TYPE_RGB:
-        case PNG_COLOR_TYPE_RGB_ALPHA:
-            returnValue->Set(Nan::New("red").ToLocalChecked(), static_cast<double>(color->red));
-            returnValue->Set(Nan::New("green").ToLocalChecked(), static_cast<double>(color->green));
-            returnValue->Set(Nan::New("blue").ToLocalChecked(), static_cast<double>(color->blue));
-            break;
-    }
-    info.GetReturnValue().Set(returnValue);
+    info.GetReturnValue().Set(pngImageInstance->convertColor(color));
 }
 
 NAN_GETTER(PngImage::getPalette) {
@@ -324,13 +337,13 @@ NAN_GETTER(PngImage::getPalette) {
     png_colorp colors;
     int colorCount;
     // If no time information is available in the header, simply return `undefined`.
-    if (png_get_PLTE(pngimageinstance->pngptr, pngimageinstance->infoptr, &colors, &colorCount) == 0) {
+    if (png_get_PLTE(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &colors, &colorCount) == 0) {
         info.GetReturnValue().Set(Nan::Undefined());
         return;
     }
     Local<Array> palette = Nan::New<Array>(colorCount);
     for (auto i = 0; i < colorCount; ++i) {
-        // TODO: Move logic from method above into function, convert color to object and add to array, return array.
-        Nan::Set(palette, i, Nan::New())
+        Nan::Set(palette, i, pngImageInstance->convertColor(colors + i));
     }
+    info.GetReturnValue().Set(palette);
 }

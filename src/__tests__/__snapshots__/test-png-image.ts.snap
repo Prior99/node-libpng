@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PngImage detects the correct color with an image of color type gray-scale 1`] = `
+Array [
+  85,
+]
+`;
+
+exports[`PngImage detects the correct color with an image of color type gray-scale-alpha 1`] = `
+Array [
+  85,
+  127,
+]
+`;
+
+exports[`PngImage detects the correct color with an image of color type palette 1`] = `
+Array [
+  3,
+]
+`;
+
+exports[`PngImage detects the correct color with an image of color type rgb 1`] = `
+Array [
+  255,
+  128,
+  64,
+]
+`;
+
+exports[`PngImage detects the correct color with an image of color type rgba 1`] = `
+Array [
+  255,
+  128,
+  64,
+  127,
+]
+`;
+
 exports[`PngImage export methods encode encodes a PNG file with the colortype being RGB 1`] = `"89504e470d0a1a0a0000000d4948445200000020000000100802000000f862ea0e000000204944415438cb63fcdfe0c0404bc0c44063306ac1a805a3168c5a306a01350000fad701df0311050e0000000049454e44ae426082"`;
 
 exports[`PngImage export methods write writes a PNG file with the colortype being RGB 1`] = `"89504e470d0a1a0a0000000d4948445200000020000000100802000000f862ea0e000000204944415438cb63fcdfe0c0404bc0c44063306ac1a805a3168c5a306a01350000fad701df0311050e0000000049454e44ae426082"`;

@@ -6,11 +6,13 @@ import {
     ColorRGBA,
     colorGrayScale,
     ColorGrayScale,
-    colorGrayScaleA,
-    ColorGrayScaleA,
+    colorGrayScaleAlpha,
+    ColorGrayScaleAlpha,
     colorPalette,
     ColorPalette,
+    Palette,
 } from "./colors";
+import { xy, XY } from "./xy";
 import { __native_PngImage } from "./native";
 
 /**
@@ -21,7 +23,7 @@ export enum ColorType {
     /**
      * Libpng color type `PNG_COLOR_TYPE_GRAY` (0).
      */
-    GRAY = "gray",
+    GRAY_SCALE = "gray-scale",
     /**
      * Libpng color type `PNG_COLOR_TYPE_RGB` (2).
      */
@@ -33,7 +35,7 @@ export enum ColorType {
     /**
      * Libpng color type `PNG_COLOR_TYPE_GRAY_ALPHA` (4).
      */
-    GRAY_ALPHA = "gray-alpha",
+    GRAY_SCALE_ALPHA = "gray-scale-alpha",
     /**
      * Libpng color type `PNG_COLOR_TYPE_RGB_ALPHA ` (6).
      */
@@ -148,7 +150,7 @@ export class PngImage {
     public get alpha(): boolean {
         switch (this.colorType) {
             case ColorType.RGBA:
-            case ColorType.GRAY_ALPHA:
+            case ColorType.GRAY_SCALE_ALPHA:
                 return true;
             default:
                 return false;
@@ -157,11 +159,11 @@ export class PngImage {
 
     public get bytesPerPixel(): number {
         switch (this.colorType) {
-            case ColorType.GRAY_ALPHA:
+            case ColorType.GRAY_SCALE_ALPHA:
                 return 2;
             case ColorType.RGBA:
                 return 4;
-            case ColorType.GRAY:
+            case ColorType.GRAY_SCALE:
             case ColorType.PALETTE:
                 return 1;
             case ColorType.RGB:
@@ -180,40 +182,41 @@ export class PngImage {
     }
 
     public get backgroundColor(): ColorRGB | ColorGrayScale | ColorPalette {
-        const color = this.nativePng.backgroundColor;
+        const { backgroundColor } = this.nativePng;
+        if (!backgroundColor) { return; }
         switch (this.colorType) {
-            case ColorType.GRAY:
-            case ColorType.GRAY_ALPHA:
-                return colorGrayScale(color.gray);
+            case ColorType.GRAY_SCALE:
+            case ColorType.GRAY_SCALE_ALPHA:
+                return colorGrayScale(backgroundColor.gray);
             case ColorType.PALETTE:
-                return colorPalette(color.index);
+                return colorPalette(backgroundColor.index);
             case ColorType.RGB:
             case ColorType.RGBA:
-                return colorRGB(color.r, color.g, color.b);
+                return colorRGB(backgroundColor.red, backgroundColor.green, backgroundColor.blue);
             default:
                 return undefined;
         }
     }
 
     public toIndex(x: number, y: number) {
-        return (x + y * this.rowBytes);
+        return (x + y * this.width) * this.bytesPerPixel;
     }
 
-    public toXY(index: number) {
+    public toXY(index: number): XY {
         const colorIndex = index / this.bytesPerPixel;
         const x = Math.floor(colorIndex % this.width);
         const y = Math.floor(colorIndex / this.width);
-        return [x, y];
+        return xy(x, y);
     }
 
-    public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleA | ColorPalette  {
+    public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleAlpha | ColorPalette  {
         const index = this.toIndex(x, y);
         const { data } = this;
         switch (this.colorType) {
-            case ColorType.GRAY:
+            case ColorType.GRAY_SCALE:
                 return colorGrayScale(data[index]);
-            case ColorType.GRAY_ALPHA:
-                return colorGrayScaleA(data[index], data[index + 1]);
+            case ColorType.GRAY_SCALE_ALPHA:
+                return colorGrayScaleAlpha(data[index], data[index + 1]);
             case ColorType.PALETTE:
                 return colorPalette(data[index]);
             case ColorType.RGB:
@@ -226,15 +229,19 @@ export class PngImage {
     }
 
     /**
-     * Returns the last modification time as returned by `png_get_tIME`.
+     * Retrieve the palette of this image if the color type is `ColorType.PALETTE`.
+     *
+     * @see ColorType
+     *
+     * @return The palette or `undefined` if a different color type was used.
      */
-    public get time(): Date {
-        const { year, month, day, hour, minute, second } = this.nativePng.time;
-        return new Date(year, month, day, hour, minute, second);
-    }
-
-    public get backgroundColor(): ColorRGB {
-        
+    public get palette(): Palette {
+        const palette = this.nativePng.palette;
+        if (!palette) { return; }
+        return palette.reduce((result: Palette, current: any, index: number) => {
+            result.set(index, colorRGB(current.red, current.green, current.blue));
+            return result;
+        }, new Map<number, ColorRGB>());
     }
 
     /**
