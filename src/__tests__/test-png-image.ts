@@ -22,6 +22,8 @@ describe("PngImage", () => {
         expect(image.palette).toBeUndefined();
         expect(image.backgroundColor).toBeUndefined();
         expect(image.bytesPerPixel).toBe(3);
+        expect(image.gamma).toBeUndefined();
+        expect(image.time).toBeUndefined();
     });
 
     it("decodes a normal png file", () => {
@@ -53,6 +55,18 @@ describe("PngImage", () => {
         const inputBuffer = readFileSync(`${__dirname}/fixtures/background-color.png`);
         const { backgroundColor } = new PngImage(inputBuffer);
         expect(backgroundColor).toEqual([255, 128, 64]);
+    });
+
+    it("reads the time of an image with the time specified in the header", () => {
+        const inputBuffer = readFileSync(`${__dirname}/fixtures/orange-rectangle-time.png`);
+        const { time } = new PngImage(inputBuffer);
+        expect(time).toEqual(new Date("2018-04-26T03:28:16.000Z"));
+    });
+
+    it("reads the gamma value of an image with the gamma value specified in the header", () => {
+        const inputBuffer = readFileSync(`${__dirname}/fixtures/orange-rectangle-gamma-background.png`);
+        const { gamma } = new PngImage(inputBuffer);
+        expect(gamma).toEqual(0.45455);
     });
 
     it("converts XY coordinates to Index", () => {

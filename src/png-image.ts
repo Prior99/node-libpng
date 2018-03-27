@@ -157,6 +157,9 @@ export class PngImage {
         }
     }
 
+    /**
+     * Returns the amount of bytes per pixel (depending on the color type) for the image.
+     */
     public get bytesPerPixel(): number {
         switch (this.colorType) {
             case ColorType.GRAY_SCALE_ALPHA:
@@ -177,10 +180,15 @@ export class PngImage {
      * Returns the last modification time as returned by `png_get_tIME`.
      */
     public get time(): Date {
-        const { year, month, day, hour, minute, second } = this.nativePng.time;
+        const { time } = this.nativePng;
+        if (!time) { return; }
+        const { year, month, day, hour, minute, second } = time;
         return new Date(year, month, day, hour, minute, second);
     }
 
+    /**
+     * Returns the background color of the image if provided in the header.
+     */
     public get backgroundColor(): ColorRGB | ColorGrayScale | ColorPalette {
         const { backgroundColor } = this.nativePng;
         if (!backgroundColor) { return; }
@@ -198,10 +206,16 @@ export class PngImage {
         }
     }
 
+    /**
+     * Convert a set of coordinates to index in the buffer.
+     */
     public toIndex(x: number, y: number) {
         return (x + y * this.width) * this.bytesPerPixel;
     }
 
+    /**
+     * Convert an index in the buffer to a set of coordinates.
+     */
     public toXY(index: number): XY {
         const colorIndex = index / this.bytesPerPixel;
         const x = Math.floor(colorIndex % this.width);
@@ -209,6 +223,9 @@ export class PngImage {
         return xy(x, y);
     }
 
+    /**
+     * Retrieves the color in the image's color format at the specified position.
+     */
     public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleAlpha | ColorPalette  {
         const index = this.toIndex(x, y);
         const { data } = this;
@@ -243,6 +260,12 @@ export class PngImage {
             return result;
         }, new Map<number, ColorRGB>());
     }
+
+    /**
+     * The gamma value of the image.
+     * Gathered from `png_get_gAMA`.
+     */
+    public get gamma(): number { return this.nativePng.gamma; }
 
     /**
      * Will encode this image to a PNG buffer.

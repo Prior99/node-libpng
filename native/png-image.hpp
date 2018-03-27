@@ -28,6 +28,7 @@ class PngImage : public Nan::ObjectWrap {
         static NAN_GETTER(getTime);
         static NAN_GETTER(getBackgroundColor);
         static NAN_GETTER(getPalette);
+        static NAN_GETTER(getGamma);
 
         // C++ only constructor and destructor.
         explicit PngImage(png_structp &pngPtr, png_infop &infoPtr);

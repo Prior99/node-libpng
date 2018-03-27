@@ -37,6 +37,7 @@ NAN_MODULE_INIT(PngImage::Init) {
     Nan::SetAccessor(ctorInstance, Nan::New("time").ToLocalChecked(), PngImage::getTime);
     Nan::SetAccessor(ctorInstance, Nan::New("backgroundColor").ToLocalChecked(), PngImage::getBackgroundColor);
     Nan::SetAccessor(ctorInstance, Nan::New("palette").ToLocalChecked(), PngImage::getPalette);
+    Nan::SetAccessor(ctorInstance, Nan::New("gamma").ToLocalChecked(), PngImage::getGamma);
     // Make sure the constructor stays persisted by storing it in a `Nan::Persistant`.
     constructor.Reset(ctor->GetFunction());
     // Store `NativePngImage` in the module's exports.
@@ -346,4 +347,18 @@ NAN_GETTER(PngImage::getPalette) {
         Nan::Set(palette, i, pngImageInstance->convertColor(colors + i));
     }
     info.GetReturnValue().Set(palette);
+}
+
+/**
+ * This getter will return the gamma value of the image, gathered from `png_get_gAMA`.
+ */
+NAN_GETTER(PngImage::getGamma) {
+    auto pngImageInstance = Nan::ObjectWrap::Unwrap<PngImage>(info.Holder());
+    double gamma;
+    // If no time information is available in the header, simply return `undefined`.
+    if (png_get_gAMA(pngImageInstance->pngPtr, pngImageInstance->infoPtr, &gamma) == 0) {
+        info.GetReturnValue().Set(Nan::Undefined());
+        return;
+    }
+    info.GetReturnValue().Set(Nan::New(gamma));
 }
