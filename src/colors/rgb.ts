@@ -48,5 +48,5 @@ export function isColorRGB(color: any): color is ColorRGB {
  * @return The converted color in rgba format.
  */
 export function convertRGBToRGBA(rgb: ColorRGB): ColorRGBA {
-    return colorRGBA(rgb.r, rgb.g, rgb.b, 0);
+    return colorRGBA(rgb.r, rgb.g, rgb.b, 255);
 }

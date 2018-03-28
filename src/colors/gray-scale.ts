@@ -42,5 +42,5 @@ export function isColorGrayScale(color: any): color is ColorGrayScale {
  * @return The converted color in rgba format.
  */
 export function convertGrayScaleToRGBA(grayScaleAlpha: ColorGrayScale): ColorRGBA {
-    return colorRGBA(grayScaleAlpha.gray, grayScaleAlpha.gray, grayScaleAlpha.gray, 0);
+    return colorRGBA(grayScaleAlpha.gray, grayScaleAlpha.gray, grayScaleAlpha.gray, 255);
 }

@@ -307,7 +307,7 @@ It will convert any color into rgba format. Unlike [other implementations](https
 const image = readPngFileSync("path/to/any-color-format-image.png");
 const color = image.rgbaAt(10, 10);
 const colorType = image.colorType;
-// Will log: "The color type of the image is palette. Pixel at 10,10 is of color 100, 150, 200, 0."
+// Will log: "The color type of the image is palette. Pixel at 10,10 is of color 100, 150, 200, 255."
 console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
 ```
 

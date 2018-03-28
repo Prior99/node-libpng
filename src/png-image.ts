@@ -325,7 +325,7 @@ export class PngImage {
     /**
      * Retrieves the color in rgba format, converting from the image's color format.
      * This will automatically convert from indexed or grayscale images to rgba. If
-     * the image's color format doesn't provide an alpha channel, `0` is returned as alpha.
+     * the image's color format doesn't provide an alpha channel, `255` is returned as alpha.
      *
      * @param x The x position of the pixel in the image of which to retrieve the color.
      * @param y The y position of the pixel in the image of which to retrieve the color.
