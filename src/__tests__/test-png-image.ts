@@ -1,6 +1,17 @@
 import { readFileSync } from "fs";
-import { PngImage, ColorType } from "../png-image";
-import { isColorRGB, isColorRGBA, isColorPalette, isColorGrayScale, isColorGrayScaleAlpha } from "../colors";
+import { PngImage } from "../png-image";
+import { ColorType } from "../color-type";
+import { xy } from "../xy";
+import { rect } from "../rect";
+import {
+    isColorRGB,
+    isColorRGBA,
+    isColorPalette,
+    isColorGrayScale,
+    isColorGrayScaleAlpha,
+    colorRGB,
+    colorRGBA,
+} from "../colors";
 import { expectRedBlueGradient } from "./utils";
 
 describe("PngImage", () => {
@@ -177,6 +188,36 @@ describe("PngImage", () => {
                 const fromDisk = readFileSync(path);
                 expect(fromDisk.toString("hex")).toMatchSnapshot();
             });
+        });
+    });
+
+    describe("resizing the canvas", () => {
+        it("resizes the canvas of a simple RGB image", () => {
+            const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/orange-rectangle.png`));
+            somePngImage.resizeCanvas(xy(18, 18), xy(10, 10), rect(0, 0, 6, 6), colorRGB(0, 0, 128));
+            somePngImage.writeSync(`${__dirname}/../../tmp-png-image-resize-simple-rgb.png`);
+        });
+
+        it("resizes the canvas of a bigger RGB image", () => {
+            const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`));
+            somePngImage.resizeCanvas(
+                xy(300, 100),
+                xy(22, 10),
+                rect(0, 0, 256, 80),
+                colorRGB(255, 255, 200),
+            );
+            somePngImage.writeSync(`${__dirname}/../../tmp-png-image-resize-bigger-rgb.png`);
+        });
+
+        it("resizes the canvas to a huge region", () => {
+            const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/opaque-rectangle.png`));
+            somePngImage.resizeCanvas(
+                xy(400, 400),
+                xy(368, 192),
+                rect(0, 0, 32, 16),
+                colorRGBA(128, 128, 128, 128),
+            );
+            somePngImage.writeSync(`${__dirname}/../../tmp-png-image-resize-alpha-huge-region.png`);
         });
     });
 });

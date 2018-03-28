@@ -12,40 +12,14 @@ import {
     ColorPalette,
     Palette,
     convertToRGBA,
+    ColorAny,
+    ColorNoAlpha,
+    colorTypeToColorChecker,
 } from "./colors";
 import { xy, XY } from "./xy";
-import { __native_PngImage } from "./native";
-
-/**
- * The color type from libpng represented as a string.
- * This describes how the actual image pixels are defined.
- */
-export enum ColorType {
-    /**
-     * Libpng color type `PNG_COLOR_TYPE_GRAY` (0).
-     */
-    GRAY_SCALE = "gray-scale",
-    /**
-     * Libpng color type `PNG_COLOR_TYPE_RGB` (2).
-     */
-    RGB = "rgb",
-    /**
-     * Libpng color type `PNG_COLOR_TYPE_PALETTE` (3).
-     */
-    PALETTE = "palette",
-    /**
-     * Libpng color type `PNG_COLOR_TYPE_GRAY_ALPHA` (4).
-     */
-    GRAY_SCALE_ALPHA = "gray-scale-alpha",
-    /**
-     * Libpng color type `PNG_COLOR_TYPE_RGB_ALPHA ` (6).
-     */
-    RGBA = "rgba",
-    /**
-     * Color type parsing failed.
-     */
-    UNKNOWN = "unknown",
-}
+import { Rect } from "./rect";
+import { ColorType } from "./color-type";
+import { __native_PngImage, __native_resize } from "./native";
 
 /**
  * The interlace type from libpng.
@@ -91,7 +65,7 @@ function convertNativeTime(nativeTime: any): Date {
 function convertNativeBackgroundColor(
     nativeBackgroundColor: any,
     colorType: ColorType,
-): ColorRGB | ColorGrayScale | ColorPalette {
+): ColorNoAlpha {
     if (!nativeBackgroundColor) { return; }
     switch (colorType) {
         case ColorType.GRAY_SCALE:
@@ -156,94 +130,94 @@ export class PngImage {
      * The bit depth of the image.
      * Gathered from `png_get_bit_depth`.
      */
-    public readonly bitDepth: number;
+    public bitDepth: number;
 
     /**
      * The amount of channels of the image.
      * Gathered from `png_get_channels`.
      */
-    public readonly channels: number;
+    public channels: number;
 
     /**
      * The color type of the image as a string.
      * Gathered from `png_get_color_type`.
      */
-    public readonly colorType: ColorType;
+    public colorType: ColorType;
 
     /**
      * The width of the image.
      * Gathered from `png_get_image_height`.
      */
-    public readonly height: number;
+    public height: number;
 
     /**
      * The width of the image.
      * Gathered from `png_get_image_width`.
      */
-    public readonly width: number;
+    public width: number;
 
     /**
      * The interlace type of the image as a string, gathered from `png_get_interlace_type`.
      */
-    public readonly interlaceType: InterlaceType;
+    public interlaceType: InterlaceType;
 
     /**
      * The amount of bytes per row of the image.
      * Gathered from `png_get_rowbytes`.
      */
-    public readonly rowBytes: number;
+    public rowBytes: number;
 
     /**
      * The horizontal offset of the image.
      * Gathered from `png_get_x_offset_pixels`.
      */
-    public readonly offsetX: number;
+    public offsetX: number;
 
     /**
      * The vertical offset of the image.
      * Gathered from `png_get_y_offset_pixels`.
      */
-    public readonly offsetY: number;
+    public offsetY: number;
 
     /**
      * The horizontal amount of pixels per meter of the image.
      * Gathered from `png_get_x_pixels_per_meter`.
      */
-    public readonly pixelsPerMeterX: number;
+    public pixelsPerMeterX: number;
 
     /**
      * The vertical amount of pixels per meter of the image.
      * Gathered from `png_get_y_pixels_per_meter`.
      */
-    public readonly pixelsPerMeterY: number;
+    public pixelsPerMeterY: number;
 
     /**
      * The buffer containing the data of the decoded image.
      */
-    public readonly data: Buffer;
+    public data: Buffer;
 
     /**
      * Returns the last modification time as returned by `png_get_tIME`.
      */
-    public readonly time: Date;
+    public time: Date;
 
     /**
      * Returns the background color of the image if provided in the header.
      */
-    public readonly backgroundColor: ColorRGB | ColorGrayScale | ColorPalette;
+    public backgroundColor: ColorRGB | ColorGrayScale | ColorPalette;
 
     /**
      * Retrieve the palette of this image if the color type is `ColorType.PALETTE`.
      *
      * @see ColorType
      */
-    public readonly palette: Palette;
+    public palette: Palette;
 
     /**
      * The gamma value of the image.
      * Gathered from `png_get_gAMA`.
      */
-    public readonly gamma: number;
+    public gamma: number;
 
     /**
      * Will be `true` if the image's color type has an alpha channel and `false` otherwise.
@@ -303,7 +277,7 @@ export class PngImage {
      *
      * @return The color at the given pixel in the image's color format.
      */
-    public at(x: number, y: number): ColorRGB | ColorRGBA | ColorGrayScale | ColorGrayScaleAlpha | ColorPalette  {
+    public at(x: number, y: number): ColorAny  {
         const index = this.toIndex(x, y);
         const { data } = this;
         switch (this.colorType) {
@@ -336,6 +310,36 @@ export class PngImage {
         return convertToRGBA(this.at(x, y), this.palette);
     }
 
+    public resizeCanvas(dimensions: XY, offset: XY, clip: Rect, fillColor: ColorAny) {
+        if (!colorTypeToColorChecker(this.colorType)(fillColor)) {
+            throw new Error("Fill color must be of same color type as image.");
+        }
+        if (offset.x + clip.width > dimensions.x) {
+            throw new Error("Width and horizontal offset are out of range for new dimensions.");
+        }
+        if (offset.y + clip.height > dimensions.y) {
+            throw new Error("Height and vertical offset are out of range for new dimensions.");
+        }
+        if (clip.x + clip.width > this.width) {
+            throw new Error("Provided clip rectangle is out of range for current dimensions horizontally.");
+        }
+        if (clip.y + clip.height > this.height) {
+            throw new Error("Provided clip rectangle is out of range for current dimensions vertically.");
+        }
+        const newBuffer = __native_resize(
+            this.data,
+            this.width,
+            this.height,
+            ...dimensions,
+            ...offset,
+            ...clip,
+            fillColor,
+            this.bitDepth,
+        );
+        this.data = newBuffer;
+        this.width = dimensions.x;
+        this.height = dimensions.y;
+    }
     /**
      * Will encode this image to a PNG buffer.
      */
