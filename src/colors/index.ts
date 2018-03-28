@@ -1,10 +1,10 @@
 import { ColorType } from "../color-type";
 
-import { isColorGrayScaleAlpha, ColorGrayScaleAlpha } from "./gray-scale-alpha";
-import { isColorGrayScale, ColorGrayScale } from "./gray-scale";
-import { isColorPalette, ColorPalette } from "./palette";
-import { isColorRGB, ColorRGB } from "./rgb";
-import { isColorRGBA, ColorRGBA } from "./rgba";
+import { colorGrayScaleAlpha, isColorGrayScaleAlpha, ColorGrayScaleAlpha } from "./gray-scale-alpha";
+import { colorGrayScale, isColorGrayScale, ColorGrayScale } from "./gray-scale";
+import { colorPalette, isColorPalette, ColorPalette } from "./palette";
+import { colorRGB, isColorRGB, ColorRGB } from "./rgb";
+import { colorRGBA, isColorRGBA, ColorRGBA } from "./rgba";
 
 export * from "./gray-scale-alpha";
 export * from "./gray-scale";
@@ -27,6 +27,23 @@ export function colorTypeToColorChecker(colorType: ColorType) {
             return isColorRGB;
         case ColorType.RGBA:
             return isColorRGBA;
+        default:
+            return;
+    }
+}
+
+export function defaultBackgroundColor(colorType: ColorType) {
+    switch (colorType) {
+        case ColorType.GRAY_SCALE:
+            return colorGrayScale(255);
+        case ColorType.GRAY_SCALE_ALPHA:
+            return colorGrayScaleAlpha(0, 0);
+        case ColorType.PALETTE:
+            return colorPalette(0);
+        case ColorType.RGB:
+            return colorRGB(255, 255, 255);
+        case ColorType.RGBA:
+            return colorRGBA(0, 0, 0, 0);
         default:
             return;
     }

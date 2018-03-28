@@ -15,9 +15,10 @@ import {
     ColorAny,
     ColorNoAlpha,
     colorTypeToColorChecker,
+    defaultBackgroundColor,
 } from "./colors";
 import { xy, XY } from "./xy";
-import { Rect } from "./rect";
+import { Rect, rect } from "./rect";
 import { ColorType } from "./color-type";
 import { __native_PngImage, __native_resize } from "./native";
 
@@ -37,6 +38,32 @@ export enum InterlaceType {
      * Interlace type parsing failed.
      */
     UNKNOWN = "unknown",
+}
+
+/**
+ * Argument configuration for calling `PngImage.resizeCanvas`.
+ */
+export interface ResizeCanvasArguments {
+    /**
+     * The dimensions the new image should have.
+     */
+    readonly dimensions?: XY;
+    /**
+     * An optional offset to offset the old image with. Will be applied to the top-left of the image.
+     * This will make the clipped image moved to the right and down by the specified amount of pixels
+     * and create a border on the top and to the left.
+     */
+    readonly offset?: XY;
+    /**
+     * Specify this to clip the image in addition to resizing the canvas. This will remove parts of the image
+     * by only using the specified rectangle.
+     * In combination with reducing the dimensions this can be used to crop the image.
+     */
+    readonly clip?: Rect;
+    /**
+     * When enlarging the canvas an empty are will be created. It will be filled with this color.
+     */
+    readonly fillColor?: ColorAny;
 }
 
 /**
@@ -310,8 +337,8 @@ export class PngImage {
         return convertToRGBA(this.at(x, y), this.palette);
     }
 
-    public resizeCanvas(dimensions: XY, offset: XY, clip: Rect, fillColor: ColorAny) {
-        if (!colorTypeToColorChecker(this.colorType)(fillColor)) {
+    public resizeCanvas({ dimensions, offset, clip, fillColor }: ResizeCanvasArguments) {
+        if (typeof fillColor !== "undefined" && !colorTypeToColorChecker(this.colorType)(fillColor)) {
             throw new Error("Fill color must be of same color type as image.");
         }
         if (offset.x + clip.width > dimensions.x) {
@@ -330,10 +357,10 @@ export class PngImage {
             this.data,
             this.width,
             this.height,
-            ...dimensions,
-            ...offset,
-            ...clip,
-            fillColor,
+            ...(dimensions || xy(this.width, this.height)),
+            ...(offset || xy(0, 0)),
+            ...(clip || rect(0, 0, this.width, this.height)),
+            fillColor || defaultBackgroundColor(this.colorType),
             this.bitDepth,
         );
         this.data = newBuffer;
