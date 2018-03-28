@@ -32,6 +32,6 @@ describe("The utilities for gray scale colors", () => {
     });
 
     it("convert to RGBA", () => {
-        expect(convertGrayScaleToRGBA(colorGrayScale(100))).toEqual([100, 100, 100, 0]);
+        expect(convertGrayScaleToRGBA(colorGrayScale(100))).toEqual([100, 100, 100, 255]);
     });
 });

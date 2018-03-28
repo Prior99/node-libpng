@@ -118,7 +118,7 @@ describe("PngImage", () => {
             colorType: ColorType.GRAY_SCALE,
             file: `${__dirname}/fixtures/grayscale-gradient-16px.png`,
             checker: isColorGrayScale,
-            rgbaColor: [85, 85, 85, 0],
+            rgbaColor: [85, 85, 85, 255],
         },
         {
             colorType: ColorType.GRAY_SCALE_ALPHA,
@@ -130,7 +130,7 @@ describe("PngImage", () => {
             colorType: ColorType.RGB,
             file: `${__dirname}/fixtures/orange-rectangle.png`,
             checker: isColorRGB,
-            rgbaColor: [255, 128, 64, 0],
+            rgbaColor: [255, 128, 64, 255],
         },
         {
             colorType: ColorType.RGBA,
@@ -142,7 +142,7 @@ describe("PngImage", () => {
             colorType: ColorType.PALETTE,
             file: `${__dirname}/fixtures/indexed-16px.png`,
             checker: isColorPalette,
-            rgbaColor: [255, 64, 128, 0],
+            rgbaColor: [255, 64, 128, 255],
         },
     ].forEach(({ colorType, file, checker, rgbaColor }) => {
         it(`detects the correct color with an image of color type ${colorType}`, () => {

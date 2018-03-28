@@ -34,6 +34,6 @@ describe("The utilities for palette colors", () => {
     });
 
     it("convert to RGBA", () => {
-        expect(convertRGBToRGBA(colorRGB(100, 90, 80))).toEqual([100, 90, 80, 0]);
+        expect(convertRGBToRGBA(colorRGB(100, 90, 80))).toEqual([100, 90, 80, 255]);
     });
 });

@@ -35,6 +35,6 @@ describe("The utilities for palette colors", () => {
     it("convert to RGBA", () => {
         const palette = new Map<number, ColorRGB>();
         palette.set(2, colorRGB(100, 90, 80));
-        expect(convertPaletteToRGBA(colorPalette(2), palette)).toEqual([100, 90, 80, 0]);
+        expect(convertPaletteToRGBA(colorPalette(2), palette)).toEqual([100, 90, 80, 255]);
     });
 });
