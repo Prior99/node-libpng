@@ -262,16 +262,17 @@ export class PngImage {
      * Returns the amount of bytes per pixel (depending on the color type) for the image.
      */
     public get bytesPerPixel(): number {
+        const bytesPerColor = Math.ceil(this.bitDepth / 8);
         switch (this.colorType) {
             case ColorType.GRAY_SCALE_ALPHA:
-                return 2;
+                return 2 * bytesPerColor;
             case ColorType.RGBA:
-                return 4;
+                return 4 * bytesPerColor;
             case ColorType.GRAY_SCALE:
             case ColorType.PALETTE:
-                return 1;
+                return 1 * bytesPerColor;
             case ColorType.RGB:
-                return 3;
+                return 3 * bytesPerColor;
             default:
                 return undefined;
         }
