@@ -46,7 +46,8 @@
       "node_modules",
       "src"
     ],
-    "mapCoverage": true
+    "mapCoverage": true,
+    "coverageReporters": ["text", "lcov"]
   },
   "devDependencies": {
     "@types/bindings": "^1.3.0",

@@ -10,7 +10,7 @@ describe("The utilities for palette colors", () => {
         expect(color).toEqual([50, 100, 150]);
     });
 
-    describe("checking if a given input is an indexed color", () => {
+    describe("checking if a given input is a rgb color", () => {
         [
             undefined,
             null,
@@ -21,6 +21,9 @@ describe("The utilities for palette colors", () => {
             [],
             {},
             [1, 2],
+            [1, 2, 3],
+            Object.assign([1, 2, 3], { r: 1 }),
+            Object.assign([1, 2, 3], { r: 1, g: 2 }),
             colorGrayScale(50),
         ].forEach(input => {
             it(`detects "${JSON.stringify(input)}" as false`, () => {

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as http from "http";
 import { qualifiedName } from "../scripts/file-name";
 
+// istanbul ignore if
 if (!fs.existsSync(qualifiedName)) {
     throw new Error(`Unable to find native addon file "${qualifiedName}".`);
 }

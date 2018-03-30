@@ -22,6 +22,7 @@ describe("The utilities for xy coordinates", () => {
             {},
             [1, 2],
             { x: 10, y: 20, [0]: 10, [1]: 20 },
+            Object.assign([1, 2], { x: 1 }),
         ].forEach(input => {
             it(`detects "${JSON.stringify(input)}" as false`, () => {
                 expect(isXY(input)).toBe(false);

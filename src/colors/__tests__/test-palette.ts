@@ -9,7 +9,7 @@ describe("The utilities for palette colors", () => {
         expect(color).toEqual([4]);
     });
 
-    describe("checking if a given input is an indexed color", () => {
+    describe("checking if a given input is a palette color", () => {
         [
             undefined,
             null,
@@ -36,5 +36,10 @@ describe("The utilities for palette colors", () => {
         const palette = new Map<number, ColorRGB>();
         palette.set(2, colorRGB(100, 90, 80));
         expect(convertPaletteToRGBA(colorPalette(2), palette)).toEqual([100, 90, 80, 255]);
+    });
+
+    it("convert to RGBA with invalid color in palette", () => {
+        const palette = new Map<number, ColorRGB>();
+        expect(convertPaletteToRGBA(colorPalette(3), palette)).toBeUndefined();
     });
 });

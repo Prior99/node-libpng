@@ -21,6 +21,7 @@ describe("The utilities for gray scale alpha colors", () => {
             {},
             [1, 2],
             colorRGB(128, 128, 128),
+            Object.assign([1, 2], { gray: 1 }),
         ].forEach(input => {
             it(`detects "${JSON.stringify(input)}" as false`, () => {
                 expect(isColorGrayScaleAlpha(input)).toBe(false);
