@@ -38,6 +38,28 @@ Array [
 
 exports[`PngImage export methods encode encodes a PNG file with the colortype being RGB 1`] = `"89504e470d0a1a0a0000000d4948445200000020000000100802000000f862ea0e000000204944415438cb63fcdfe0c0404bc0c44063306ac1a805a3168c5a306a01350000fad701df0311050e0000000049454e44ae426082"`;
 
+exports[`PngImage export methods encode throws an error when trying to encode a non-RGB/RGBA image 1`] = `"Can only encode images with RGB or RGBA color type."`;
+
+exports[`PngImage export methods write throws an error when trying to write a non-RGB/RGBA image synchroneously 1`] = `"Can only encode images with RGB or RGBA color type."`;
+
 exports[`PngImage export methods write writes a PNG file with the colortype being RGB 1`] = `"89504e470d0a1a0a0000000d4948445200000020000000100802000000f862ea0e000000204944415438cb63fcdfe0c0404bc0c44063306ac1a805a3168c5a306a01350000fad701df0311050e0000000049454e44ae426082"`;
 
+exports[`PngImage export methods writeSync throws an error when trying to write a non-RGB/RGBA image 1`] = `"Can only encode images with RGB or RGBA color type."`;
+
 exports[`PngImage export methods writeSync writes a PNG file with the colortype being RGB 1`] = `"89504e470d0a1a0a0000000d4948445200000020000000100802000000f862ea0e000000204944415438cb63fcdfe0c0404bc0c44063306ac1a805a3168c5a306a01350000fad701df0311050e0000000049454e44ae426082"`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error if the fill color is invalid 1`] = `"Fill color must be of same color type as image."`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error when the clip rectangle is out of range 1`] = `"Provided clipping rectangle is out of range for current dimensions."`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error when the clip rectangle uses invalid coordinates 1`] = `"Invalid clipping rectangle."`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error when the clipped rectangle exceeds the new canvas size 1`] = `"Dimensions and offset are out of range for new dimensions."`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error when the dimensions are invalid 1`] = `"Invalid dimensions."`;
+
+exports[`PngImage resizing the canvas invalid configuration throws an error when the offset is invalid 1`] = `"Invalid offset."`;
+
+exports[`PngImage throws an error when reading a pixel outside of the image's dimensions 1`] = `"Index out of range when reading pixel from image."`;
+
+exports[`PngImage throws an error when reading a pixel outside of the image's dimensions 2`] = `"Index out of range when reading pixel from image."`;

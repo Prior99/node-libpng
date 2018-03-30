@@ -74,10 +74,10 @@ export interface ResizeCanvasArguments {
  * @return The time converted to a javascript `Date` object or `undefined` if the time was
  *         not set in the PNG's header.
  */
-function convertNativeTime(nativeTime: any): Date {
+export function convertNativeTime(nativeTime: any): Date {
     if (!nativeTime) { return; }
     const { year, month, day, hour, minute, second } = nativeTime;
-    return new Date(year, month, day, hour, minute, second);
+    return new Date(year, month - 1, day, hour, minute, second);
 }
 
 /**
@@ -89,7 +89,7 @@ function convertNativeTime(nativeTime: any): Date {
  * @return The converted background color in `ColorRGB`, `ColorPalette` or `ColorGrayScale` format
  *         or undefined if the background color was not set in the PNG.
  */
-function convertNativeBackgroundColor(
+export function convertNativeBackgroundColor(
     nativeBackgroundColor: any,
     colorType: ColorType,
 ): ColorNoAlpha {
@@ -306,6 +306,9 @@ export class PngImage {
      */
     public at(x: number, y: number): ColorAny  {
         const index = this.toIndex(x, y);
+        if (index > this.data.length || index < 0) {
+            throw new Error("Index out of range when reading pixel from image.");
+        }
         const { data } = this;
         switch (this.colorType) {
             case ColorType.GRAY_SCALE:
@@ -338,29 +341,36 @@ export class PngImage {
     }
 
     public resizeCanvas({ dimensions, offset, clip, fillColor }: ResizeCanvasArguments) {
+        const safeOffset = typeof offset === "undefined" ? xy(0, 0) : offset;
+        const safeDimensions = typeof dimensions === "undefined" ? xy(this. width, this.height) : dimensions;
+        const safeClip = typeof clip === "undefined" ? rect(0, 0, this.width, this.height) : clip;
+        const safeFillColor = typeof fillColor === "undefined" ? defaultBackgroundColor(this.colorType) : fillColor;
         if (typeof fillColor !== "undefined" && !colorTypeToColorChecker(this.colorType)(fillColor)) {
             throw new Error("Fill color must be of same color type as image.");
         }
-        if (offset.x + clip.width > dimensions.x) {
-            throw new Error("Width and horizontal offset are out of range for new dimensions.");
+        if (safeDimensions.x < 1 || safeDimensions.y < 1) {
+            throw new Error("Invalid dimensions.");
         }
-        if (offset.y + clip.height > dimensions.y) {
-            throw new Error("Height and vertical offset are out of range for new dimensions.");
+        if (safeOffset.x + safeClip.width > safeDimensions.x || safeOffset.y + safeClip.height > safeDimensions.y) {
+            throw new Error("Dimensions and offset are out of range for new dimensions.");
         }
-        if (clip.x + clip.width > this.width) {
-            throw new Error("Provided clip rectangle is out of range for current dimensions horizontally.");
+        if (safeClip.x + safeClip.width > this.width || safeClip.y + safeClip.height > this.height) {
+            throw new Error("Provided clipping rectangle is out of range for current dimensions.");
         }
-        if (clip.y + clip.height > this.height) {
-            throw new Error("Provided clip rectangle is out of range for current dimensions vertically.");
+        if (safeClip.x < 0 || safeClip.y < 0 || safeClip.width < 1 || safeClip.height < 0) {
+            throw new Error("Invalid clipping rectangle.");
+        }
+        if (safeOffset.x < 0 || safeOffset.y < 0) {
+            throw new Error("Invalid offset.");
         }
         const newBuffer = __native_resize(
             this.data,
             this.width,
             this.height,
-            ...(dimensions || xy(this.width, this.height)),
-            ...(offset || xy(0, 0)),
-            ...(clip || rect(0, 0, this.width, this.height)),
-            fillColor || defaultBackgroundColor(this.colorType),
+            ...safeDimensions,
+            ...safeOffset,
+            ...safeClip,
+            safeFillColor,
             this.bitDepth,
         );
         this.data = newBuffer;
