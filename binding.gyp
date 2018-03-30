@@ -21,7 +21,8 @@
                 "./native/encode.cpp",
                 "./native/is-png.cpp",
                 "./native/png-image.cpp",
-                "./native/resize.cpp"
+                "./native/resize.cpp",
+                "./native/copy.cpp",
             ]
         }
     ]

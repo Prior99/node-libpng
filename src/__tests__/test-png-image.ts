@@ -247,6 +247,46 @@ describe("PngImage", () => {
         }
     });
 
+    describe("copyFrom", () => {
+        const sourcePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/orange-rectangle.png`));
+        const targetPngImage = new PngImage(readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`));
+
+        it("throws an error if the source rectangle is invalid", () => {
+            expect(
+                () => targetPngImage.copyFrom(sourcePngImage, xy(0, 0), rect(0, 0, 0, 0)),
+            ).toThrowErrorMatchingSnapshot();
+        });
+
+        it("throws an error if the offset is invalid", () => {
+            expect(() => targetPngImage.copyFrom(sourcePngImage, xy(-1, 0))).toThrowErrorMatchingSnapshot();
+        });
+
+        it("throws an error if the color types don't match", () => {
+            const grayScalePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/grayscale-gradient-16px.png`));
+            expect(() => targetPngImage.copyFrom(grayScalePngImage)).toThrowErrorMatchingSnapshot();
+        });
+
+        it("throws an error if the source rectangle exceeds the image's dimensions", () => {
+            expect(
+                () => targetPngImage.copyFrom(sourcePngImage, xy(0, 0), rect(10, 200, 100, 80)),
+            ).toThrowErrorMatchingSnapshot();
+        });
+
+        it("throws an error if the source rectangle and the offset exceed the current image's size", () => {
+            expect(
+                () => targetPngImage.copyFrom(sourcePngImage, xy(250, 250), rect(0, 0, 8, 8)),
+            ).toThrowErrorMatchingSnapshot();
+        });
+
+        it("copies an image into another one", () => {
+            targetPngImage.copyFrom(sourcePngImage, xy(10, 10), rect(2, 0, 10, 15));
+            expect(targetPngImage.at(9, 9)).toEqual([255 - 9, 0, 9]);
+            expect(targetPngImage.at(10, 10)).toEqual([255, 128, 64]);
+            expect(targetPngImage.at(18, 24)).toEqual([255, 128, 64]);
+            expect(targetPngImage.at(19, 25)).toEqual([255 - 19, 0, 19]);
+        });
+    });
+
     describe("resizing the canvas", () => {
         it("resizes the canvas of a simple RGB image", () => {
             const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/orange-rectangle.png`));

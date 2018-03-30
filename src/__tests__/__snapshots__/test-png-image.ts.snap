@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PngImage copyFrom throws an error if the color types don't match 1`] = `"Cannot copy from image with different color type."`;
+
+exports[`PngImage copyFrom throws an error if the offset is invalid 1`] = `"Invalid offset."`;
+
+exports[`PngImage copyFrom throws an error if the source rectangle and the offset exceed the current image's size 1`] = `"Provided source rectangle and offset are out of range for this image."`;
+
+exports[`PngImage copyFrom throws an error if the source rectangle exceeds the image's dimensions 1`] = `"Provided source rectangle is out of range for source image."`;
+
+exports[`PngImage copyFrom throws an error if the source rectangle is invalid 1`] = `"Invalid source rectangle."`;
+
 exports[`PngImage detects the correct color with an image of color type gray-scale 1`] = `
 Array [
   85,

@@ -15,7 +15,7 @@ NAN_METHOD(resize) {
     // 1st Parameter: The input buffer.
     Local<Object> inputBuffer = Local<Object>::Cast(info[0]);
     auto lengthIn = Buffer::Length(inputBuffer);
-    auto *dataIn = reinterpret_cast<uint8_t*>(Buffer::Data(inputBuffer)); //Buffer for inputdata, as short array
+    auto *dataIn = reinterpret_cast<uint8_t*>(Buffer::Data(inputBuffer));
     // 2nd Parameter: The old width.
     const auto oldWidth = static_cast<uint32_t>(info[1]->NumberValue());
     // 3rd Parameter: The old height.

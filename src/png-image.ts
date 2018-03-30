@@ -20,7 +20,7 @@ import {
 import { xy, XY } from "./xy";
 import { Rect, rect } from "./rect";
 import { ColorType } from "./color-type";
-import { __native_PngImage, __native_resize } from "./native";
+import { __native_PngImage, __native_resize, __native_copy } from "./native";
 
 /**
  * The interlace type from libpng.
@@ -379,7 +379,7 @@ export class PngImage {
         if (safeClip.x + safeClip.width > this.width || safeClip.y + safeClip.height > this.height) {
             throw new Error("Provided clipping rectangle is out of range for current dimensions.");
         }
-        if (safeClip.x < 0 || safeClip.y < 0 || safeClip.width < 1 || safeClip.height < 0) {
+        if (safeClip.x < 0 || safeClip.y < 0 || safeClip.width < 1 || safeClip.height < 1) {
             throw new Error("Invalid clipping rectangle.");
         }
         if (safeOffset.x < 0 || safeOffset.y < 0) {
@@ -399,6 +399,46 @@ export class PngImage {
         this.width = safeDimensions.x;
         this.height = safeDimensions.y;
     }
+
+    /**
+     * Copies the specified rectangle from the other image (or the whole other image if rectangle is omitted)
+     * into this image at the current offset (or to the top left if the offset is omitted).
+     * Modifies this image and the underlying buffer.
+     *
+     * @param other The other image which should be copied into this image.
+     * @param offset The target position in this image to which the other image should be copied.
+     * @param source The clipping rectangle of the other image which should be copied.
+     */
+    public copyFrom(other: PngImage, offset?: XY, source?: Rect) {
+        const safeOffset = typeof offset === "undefined" ? xy(0, 0) : offset;
+        const safeSource = typeof source === "undefined" ? rect(0, 0, other.width, other.height) : source;
+        if (safeSource.x < 0 || safeSource.y < 0 || safeSource.width < 1 || safeSource.height < 1) {
+            throw new Error("Invalid source rectangle.");
+        }
+        if (safeOffset.x < 0 || safeOffset.y < 0) {
+            throw new Error("Invalid offset.");
+        }
+        if (other.colorType !== this.colorType) {
+            throw new Error("Cannot copy from image with different color type.");
+        }
+        if (safeSource.x + safeSource.width > other.width || safeSource.y + safeSource.height > other.height) {
+            throw new Error("Provided source rectangle is out of range for source image.");
+        }
+        if (safeSource.width + safeOffset.x > this.width || safeSource.height + safeOffset.y > this.height) {
+            throw new Error("Provided source rectangle and offset are out of range for this image.");
+        }
+        __native_copy(
+            other.data,
+            this.data,
+            other.width,
+            other.height,
+            this.width,
+            this.height,
+            ...safeSource,
+            ...safeOffset,
+        );
+    }
+
     /**
      * Will encode this image to a PNG buffer.
      */
