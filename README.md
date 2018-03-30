@@ -28,6 +28,10 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
         * [Accessing the pixels](#accessing-the-pixels)
            * [Accessing in the image's color format](#accessing-in-the-images-color-format)
            * [Accessing in rgba format](#accessing-in-rgba-format)
+        * [Modifying the image](#modifying-the-image)
+           * [Cropping](#cropping)
+           * [Resizing the canvas](#resizing-the-canvas)
+           * [Copying an image into another image](#copying-an-image-into-another-image)
     * [Benchmark](#benchmark)
        * [Read access (Decoding)](#read-access-decoding)
        * [Write access (Encoding)](#write-access-encoding)
@@ -310,6 +314,70 @@ const colorType = image.colorType;
 // Will log: "The color type of the image is palette. Pixel at 10,10 is of color 100, 150, 200, 255."
 console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
 ```
+
+### Modifying the image
+
+Several basic utilities for modifying an image exist.
+
+#### Cropping
+
+A simple utility for cropping an image to a sub-rectangle exists: [PngImage.crop](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#crop). It's a simplified version of [PngImage.resizeCanvas](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#resizecanvas).
+
+It will reduce the image in-place to the specified rectangle:
+
+```typescript
+import { readPngFileSync, rect } from "node-libpng";
+
+const image = readPngFileSync("path/to/image.png");
+image.crop(rect(10, 10, 100, 100));
+// Will log: "New dimensions: 100x100".
+console.log(`New dimensions: ${image.width}x${image.height}.`);
+```
+
+#### Resizing the canvas
+
+Use [PngImage.resizeCanvas](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#resizecanvas) for advanced cropping operations.
+
+Take a look at [ResizeCanvasArguments](https://prior99.github.io/node-libpng/docs/interfaces/resizecanvasarguments.html).
+
+It takes a configuration object which makes it possible to provide:
+ * An offset to the top left (a padding).
+ * A fill color for uncovered regions.
+ * A subrectangle of the image to use.
+ * The new dimensions for the image.
+
+In the following example, a 10 pixel margin is applied to the top and to the left and a 50x50 pixel area is copied from the image at offset 20,20.
+The image is resized to 100x100, so a 40 pixel margin will exist to the right and to the bottom. The background is filled in red:
+
+```typescript
+import { readPngFileSync, rect, xy, colorRGB } from "node-libpng";
+
+const image = readPngFileSync("path/to/image.png");
+image.resizeCanvas({
+    offset: xy(10, 10),
+    clip: rect(20, 20, 50, 50),
+    dimensions: xy(100, 100),
+    fillColor: colorRGB(255, 0, 0),
+});
+// Will log: "New dimensions: 100x100".
+console.log(`New dimensions: ${image.width}x${image.height}.`);
+```
+
+#### Copying an image into another image
+
+Use [PngImage.copyFrom](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#copyfrom) to copy an area of one image into another one:
+
+```typescript
+import { readPngFileSync, xy, rect } from "node-libpng";
+
+const source = readPngFileSync("path/to/source-image.png");
+const target = readPngFileSync("path/to/target-image.png");
+
+target.copyFrom(source, xy(10, 10), rect(100, 100, 50, 50));
+```
+
+The above example will copy a 50x50 rectangle from the source image at position 100,100 to the target image at position 10,10.
+The offset and the subrectangle can be omitted to copy the whole source image to the top left corner of the target image.
 
 ## Benchmark
 
