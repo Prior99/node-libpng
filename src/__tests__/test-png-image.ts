@@ -237,6 +237,16 @@ describe("PngImage", () => {
         });
     });
 
+    it("crop", () => {
+        const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`));
+        somePngImage.crop(rect(100, 100, 10, 1));
+        expect(somePngImage.width).toBe(10);
+        expect(somePngImage.height).toBe(1);
+        for (let i = 0; i < 10; ++i) {
+            expect(somePngImage.at(i, 0)).toEqual([155 - i, 0, 100 + i]);
+        }
+    });
+
     describe("resizing the canvas", () => {
         it("resizes the canvas of a simple RGB image", () => {
             const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/orange-rectangle.png`));

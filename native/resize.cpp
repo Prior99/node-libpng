@@ -70,9 +70,9 @@ NAN_METHOD(resize) {
     // width of the new image, clamp to the edges.
     const auto bytes = std::min(innerWidth, newWidth - outerPaddingLeft) * bytesPerPixel;
     // Iterate over every row on the old image
-    for (auto yOld = innerPaddingTop; yOld < innerHeight; ++yOld) {
+    for (auto yOld = innerPaddingTop; yOld < innerHeight + innerPaddingTop; ++yOld) {
         const auto indexOld = (yOld * oldWidth + innerPaddingLeft) * bytesPerPixel;
-        const auto indexNew = ((outerPaddingTop + yOld) * newWidth + outerPaddingLeft) * bytesPerPixel;
+        const auto indexNew = ((outerPaddingTop + yOld - innerPaddingTop) * newWidth + outerPaddingLeft) * bytesPerPixel;
         std::memcpy(dataOut + indexNew, dataIn + indexOld, bytes);
     }
 

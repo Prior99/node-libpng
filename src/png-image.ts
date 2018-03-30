@@ -340,6 +340,28 @@ export class PngImage {
         return convertToRGBA(this.at(x, y), this.palette);
     }
 
+    /**
+     * A convenience wrapper around `resizeCanvas`. Crops the image to a specified sub-rectangle.
+     * Modifies this image and the underlying buffer.
+     *
+     * @see PngImage.resizeCanvas
+     * @see ResizeCanvasArguments
+     *
+     * @param clip A sub-rectangle which should be cropped out of the image.
+     */
+    public crop(clip: Rect) {
+        this.resizeCanvas({
+            clip,
+            dimensions: clip.dimensions,
+        });
+    }
+
+    /**
+     * Resizes the canvas with while optionally adding padding and cropping regions from the image.
+     * Modifies this image and the underlying buffer.
+     *
+     * @see ResizeCanvasArguments
+     */
     public resizeCanvas({ dimensions, offset, clip, fillColor }: ResizeCanvasArguments) {
         const safeOffset = typeof offset === "undefined" ? xy(0, 0) : offset;
         const safeDimensions = typeof dimensions === "undefined" ? xy(this. width, this.height) : dimensions;
@@ -374,8 +396,8 @@ export class PngImage {
             this.bitDepth,
         );
         this.data = newBuffer;
-        this.width = dimensions.x;
-        this.height = dimensions.y;
+        this.width = safeDimensions.x;
+        this.height = safeDimensions.y;
     }
     /**
      * Will encode this image to a PNG buffer.
