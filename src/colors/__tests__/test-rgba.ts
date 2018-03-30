@@ -1,4 +1,4 @@
-import { colorRGBA, isColorRGBA, convertToRGBA} from "../rgba";
+import { colorRGBA, isColorRGBA, convertToRGBA } from "../rgba";
 import { colorRGB, ColorRGB } from "../rgb";
 import { colorGrayScale } from "../gray-scale";
 import { colorGrayScaleAlpha } from "../gray-scale-alpha";
