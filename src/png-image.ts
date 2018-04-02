@@ -20,7 +20,7 @@ import {
 import { xy, XY } from "./xy";
 import { Rect, rect } from "./rect";
 import { ColorType } from "./color-type";
-import { __native_PngImage, __native_resize, __native_copy } from "./native";
+import { __native_PngImage, __native_resize, __native_copy, __native_fill } from "./native";
 
 /**
  * The interlace type from libpng.
@@ -437,6 +437,42 @@ export class PngImage {
             ...safeSource,
             ...safeOffset,
         );
+    }
+
+    /**
+     * Fill an area of the image with a specific color.
+     * This will change the underlying data of this image. The change is in-place.
+     *
+     * @param color The color with which the area should be filled.
+     * @param area The area to fill. Can be omitted to fill the whole image.
+     */
+    public fill(color: ColorAny, area?: Rect) {
+        const safeArea = typeof area === "undefined" ? rect(0, 0, this.width, this.height) : area;
+        if (typeof color === "undefined") {
+            throw new Error("Fill color must be specified.");
+        }
+        if (!colorTypeToColorChecker(this.colorType)(color)) {
+            throw new Error("Fill color must be of same color type as image.");
+        }
+        const notInside = safeArea.x < 0 ||
+            safeArea.y < 0 ||
+            safeArea.x + safeArea.width > this.width ||
+            safeArea.y + safeArea.height > this.height;
+        if (notInside) {
+            throw new Error("Provided area is out of range for this image.");
+        }
+        __native_fill(this.data, this.width, this.height, ...safeArea, color, this.bitDepth);
+    }
+
+    /**
+     * Set the color of one specific pixel on this image.
+     * This will change the underlying data of this image. The change is in-place.
+     *
+     * @param color The color with which the area should be filled.
+     * @param position The position of the pixel to colorize.
+     */
+    public set(color: ColorAny, position: XY ){
+        this.fill(color, rect(position.x, position.y, 1, 1));
     }
 
     /**

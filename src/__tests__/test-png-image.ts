@@ -11,8 +11,9 @@ import {
     isColorGrayScaleAlpha,
     colorRGB,
     colorRGBA,
+    colorGrayScale,
 } from "../colors";
-import { expectRedBlueGradient } from "./utils";
+import { expectRedBlueGradient, expectEveryPixel } from "./utils";
 
 describe("PngImage", () => {
     it("reads the info of a normal png file", () => {
@@ -393,6 +394,81 @@ describe("PngImage", () => {
 
         it("returns `undefined` for `backgroundColor`", () => {
             expect(somePngImage.backgroundColor).toBeUndefined();
+        });
+    });
+
+    describe("Filling an area of the image with a color", () => {
+        let somePngImage: PngImage;
+
+        beforeEach(() => {
+            somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`));
+        });
+
+        it ("throws an error with no color specified", () => {
+            expect(() => (somePngImage.fill as any)()).toThrowErrorMatchingSnapshot();
+        });
+
+        it ("throws an error with an invalid color type", () => {
+            expect(() => somePngImage.fill(colorGrayScale(128))).toThrowErrorMatchingSnapshot();
+        });
+
+        it ("throws an error with an invalid area specified", () => {
+            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(0, 0, 270, 10))).toThrowErrorMatchingSnapshot();
+            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(-1, -2, 25, 10))).toThrowErrorMatchingSnapshot();
+            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(100, 0, 250, 10))).toThrowErrorMatchingSnapshot();
+        });
+
+        it ("fills an area of the image with the specified color", () => {
+            somePngImage.fill(colorRGB(128, 255, 10), rect(10, 20, 225, 205));
+            const { data } = somePngImage;
+            for (let i = 0; i < data.length; i += 3) {
+                // The image is of 256 pixel width.
+                const x = (i / 3) % 256;
+                const y = Math.floor((i / 3) / 256);
+                const r = data[i + 0];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                if (x < 10 || x >= 235 || y < 20 || y >= 225) {
+                    expect(r).toBe(255 - x);
+                    expect(g).toBe(0);
+                    expect(b).toBe(x);
+                } else {
+                    expect(r).toBe(128);
+                    expect(g).toBe(255);
+                    expect(b).toBe(10);
+                }
+            }
+        });
+
+        it ("fills the whole image if the area is omitted", () => {
+            somePngImage.fill(colorRGB(128, 255, 10));
+            expectEveryPixel(somePngImage.data, colorRGB(128, 255, 10));
+        });
+    });
+
+    describe("Setting the color of a specific pixel", () => {
+        const somePngImage = new PngImage(readFileSync(`${__dirname}/fixtures/red-blue-gradient-256px.png`));
+
+        it ("changes the color of the specified pixel", () => {
+            somePngImage.set(colorRGB(128, 255, 10), xy(10, 10));
+            const { data } = somePngImage;
+            for (let i = 0; i < data.length; i += 3) {
+                // The image is of 256 pixel width.
+                const x = (i / 3) % 256;
+                const y = Math.floor((i / 3) / 256);
+                const r = data[i + 0];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                if (x === 10 && y === 10) {
+                    expect(r).toBe(128);
+                    expect(g).toBe(255);
+                    expect(b).toBe(10);
+                } else {
+                    expect(r).toBe(255 - x);
+                    expect(g).toBe(0);
+                    expect(b).toBe(x);
+                }
+            }
         });
     });
 });

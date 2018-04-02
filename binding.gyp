@@ -23,6 +23,7 @@
                 "./native/png-image.cpp",
                 "./native/resize.cpp",
                 "./native/copy.cpp",
+                "./native/fill.cpp",
             ]
         }
     ]

@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`PngImage Filling an area of the image with a color throws an error with an invalid area specified 1`] = `"Provided area is out of range for this image."`;
+
+exports[`PngImage Filling an area of the image with a color throws an error with an invalid area specified 2`] = `"Provided area is out of range for this image."`;
+
+exports[`PngImage Filling an area of the image with a color throws an error with an invalid area specified 3`] = `"Provided area is out of range for this image."`;
+
+exports[`PngImage Filling an area of the image with a color throws an error with an invalid color type 1`] = `"Fill color must be of same color type as image."`;
+
+exports[`PngImage Filling an area of the image with a color throws an error with no color specified 1`] = `"Fill color must be specified."`;
+
 exports[`PngImage copyFrom throws an error if the color types don't match 1`] = `"Cannot copy from image with different color type."`;
 
 exports[`PngImage copyFrom throws an error if the offset is invalid 1`] = `"Invalid offset."`;
