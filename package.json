@@ -1,6 +1,6 @@
 {
   "name": "node-libpng",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",

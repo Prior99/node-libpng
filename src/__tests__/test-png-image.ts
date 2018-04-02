@@ -413,9 +413,15 @@ describe("PngImage", () => {
         });
 
         it ("throws an error with an invalid area specified", () => {
-            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(0, 0, 270, 10))).toThrowErrorMatchingSnapshot();
-            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(-1, -2, 25, 10))).toThrowErrorMatchingSnapshot();
-            expect(() => somePngImage.fill(colorRGB(128, 128, 128), rect(100, 0, 250, 10))).toThrowErrorMatchingSnapshot();
+            expect(() => {
+                somePngImage.fill(colorRGB(128, 128, 128), rect(0, 0, 270, 10));
+            }).toThrowErrorMatchingSnapshot();
+            expect(() => {
+                somePngImage.fill(colorRGB(128, 128, 128), rect(-1, -2, 25, 10));
+            }).toThrowErrorMatchingSnapshot();
+            expect(() => {
+                somePngImage.fill(colorRGB(128, 128, 128), rect(100, 0, 250, 10));
+            }).toThrowErrorMatchingSnapshot();
         });
 
         it ("fills an area of the image with the specified color", () => {

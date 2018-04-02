@@ -32,6 +32,8 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
            * [Cropping](#cropping)
            * [Resizing the canvas](#resizing-the-canvas)
            * [Copying an image into another image](#copying-an-image-into-another-image)
+           * [Filling an area with a specified color](#filling-an-area-with-a-specified-color)
+           * [Setting a single pixel](#setting-a-single-pixel)
     * [Benchmark](#benchmark)
        * [Read access (Decoding)](#read-access-decoding)
        * [Write access (Encoding)](#write-access-encoding)
@@ -378,6 +380,30 @@ target.copyFrom(source, xy(10, 10), rect(100, 100, 50, 50));
 
 The above example will copy a 50x50 rectangle from the source image at position 100,100 to the target image at position 10,10.
 The offset and the subrectangle can be omitted to copy the whole source image to the top left corner of the target image.
+
+#### Filling an area with a specified color
+
+Use [PngImage.fill](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#fill) to fill an area with a specified color:
+
+```typescript
+import { readPngFileSync, colorRGB, rect } from "node-libpng";
+
+const image = readPngFileSync("path/to/source-image.png");
+// Change a 100x100 pixel area at offset 10,10 to red:
+image.fill(colorRGB(255, 0, 0), rect(10, 10, 100, 100));
+```
+
+#### Setting a single pixel
+
+With [PngImage.set](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#set) an individual pixel's color can be changed:
+
+```typescript
+import { readPngFileSync, colorRGB, xy } from "node-libpng";
+
+const image = readPngFileSync("path/to/source-image.png");
+// Change the pixel at 10,10 to red:
+image.set(colorRGB(255, 0, 0), xy(10, 10));
+```
 
 ## Benchmark
 
