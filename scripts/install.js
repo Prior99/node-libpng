@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const request = require("request");
+const fetch = require("node-fetch");
 const fileName = require("./file-name");
 
 if (fs.existsSync(fileName.qualifiedName)) { return; }
@@ -11,28 +11,21 @@ const pkg = require(path.resolve(__dirname, "..", "package.json"));
 const packageVersion = pkg.version;
 const url = `https://github.com/Prior99/node-libpng/releases/download/${packageVersion}/${fileName.baseName}`;
 
-const destination = fs.createWriteStream(fileName.qualifiedName);
-
-request.get(url)
-    .on("error", err => {
-        throw new Error(err);
-        fs.unlink(fileName.qualifiedName);
-        throw new Error("Unable to download binaries for node-libpng.");
-    })
-    .on("response", response => {
-        if (response.statusCode >= 200 && response.statusCode < 300) {
-            response.pipe(destination);
-            destination.on("finish", () => {
-                console.info("Successfully downloaded binaries for node-libpng.");
-                destination.close();
-            });
-            return;
+fetch(url)
+    .then(response => {
+        if (response.ok) {
+            return response.buffer();
         }
-        if (response.statusCode === 404) {
+        if (response.status === 404) {
             throw new Error(`No supported node-libpng ${packageVersion} build found for node ${process.version} on ${process.platform} (${process.arch}).`);
         } else {
             throw new Error(`Error downloading binaries for node-libpng ${packageVersion}. Received status code ${response.statusCode}`)
         }
-        destination.close();
-        fs.unlink(fileName.qualifiedName);
-    });
+    })
+    .catch(err => {
+        throw new Error(err);
+    })
+    .then(buffer => {
+        fs.writeFileSync(fileName.qualifiedName, buffer);
+        console.info("Successfully downloaded binaries for node-libpng.");
+    })
