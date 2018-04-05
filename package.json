@@ -1,6 +1,6 @@
 {
   "name": "node-libpng",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
@@ -21,12 +21,12 @@
     "url": "https://github.com/Prior99/node-libpng"
   },
   "files": [
+    "index.d.ts",
     "./dist",
     "./docs",
     "./images",
     "./scripts",
     "./src",
-    "./index.d.ts",
     "./LICENSE",
     "./README.md"
   ],
