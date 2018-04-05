@@ -22,7 +22,6 @@ request.get(url)
             response.pipe(destination);
             destination.on("finish", () => {
                 console.info("Successfully downloaded binaries for node-libpng.");
-                destination.close();
             });
             return;
         }
