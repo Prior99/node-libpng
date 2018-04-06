@@ -31,7 +31,6 @@ describe("encode", () => {
         const encoded = encode(someGradient, {
             width: 256,
             height: 256,
-            alpha: false,
         });
         expect(encoded.toString("hex")).toMatchSnapshot();
     });
@@ -40,7 +39,6 @@ describe("encode", () => {
         const encoded = encode(someOpaqueSquare, {
             width: 16,
             height: 16,
-            alpha: true,
         });
         expect(encoded.toString("hex")).toMatchSnapshot();
     });
@@ -49,33 +47,14 @@ describe("encode", () => {
         const options = {
             width: 16,
             height: 16,
-            alpha: false,
         };
         expect(() => encode("something" as any, options)).toThrowErrorMatchingSnapshot();
-    });
-
-    it("throws an error when trying to encode a PNG with an alpha channel with alpha specified as disabled", () => {
-        const options = {
-            width: 16,
-            height: 16,
-            alpha: false,
-        };
-        expect(() => encode(someOpaqueSquare, options)).toThrowErrorMatchingSnapshot();
     });
 
     [
         {
             width: 16,
-            alpha: false,
-        },
-        {
             height: 8,
-            alpha: false,
-        },
-        {
-            width: 16,
-            height: 8,
-            alpha: false,
         },
     ].forEach(options => {
         it(`encodes a PNG with ${JSON.stringify(options)} as options`, () => {
@@ -85,11 +64,7 @@ describe("encode", () => {
 
     [
         {
-            alpha: false,
-        },
-        {
             width: 20,
-            alpha: "false",
         },
         {},
         null,
@@ -97,27 +72,23 @@ describe("encode", () => {
         "string",
         {
             width: "twenty",
-            alpha: true,
+            height: 10,
         },
         {
             width: 0,
             height: 0,
-            alpha: true,
         },
         {
             width: 20,
             height: 1.5,
-            alpha: true,
         },
         {
             width: 1.5,
             height: 20,
-            alpha: true,
         },
         {
             width: 1000,
             height: 1000,
-            alpha: true,
         },
     ].forEach(options => {
         it(`throws an error with bad options ${JSON.stringify(options)}`, () => {
@@ -128,7 +99,7 @@ describe("encode", () => {
 
 describe("writePngFileSync", () => {
     it("encodes a PNG and writes it to disk", () => {
-        const options = { width: 16, alpha: false };
+        const options = { width: 16, height: 8 };
         const encoded = encode(someOrangeRectangle, options);
         const path = `${__dirname}/../../tmp-write-sync.png`;
         writePngFileSync(path, someOrangeRectangle, options);
@@ -140,7 +111,7 @@ describe("writePngFileSync", () => {
 describe("writePngFile", () => {
     describe("using the Promise API", () => {
         it("encodes a PNG and writes it to disk", async () => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const encoded = encode(someOrangeRectangle, options);
             const path = `${__dirname}/../../tmp-write-promise.png`;
             await writePngFile(path, someOrangeRectangle, options);
@@ -149,13 +120,13 @@ describe("writePngFile", () => {
         });
 
         it("rejects with an error when encoding failed", async () => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const path = `${__dirname}/../../tmp-write-promise-error-encoding.png`;
             expect(writePngFile(path, Buffer.alloc(2), options)).rejects.toMatchSnapshot();
         });
 
         it("rejects with an error when writing failed", async () => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const path = `this-file/does/not/exist.png`;
             expect(writePngFile(path, someOrangeRectangle, options)).rejects.toBeTruthy();
         });
@@ -163,7 +134,7 @@ describe("writePngFile", () => {
 
     describe("using the callback API", () => {
         it("encodes a PNG and writes it to disk", done => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const encoded = encode(someOrangeRectangle, options);
             const path = `${__dirname}/../../tmp-write-callback.png`;
             writePngFile(path, someOrangeRectangle, options, error => {
@@ -175,7 +146,7 @@ describe("writePngFile", () => {
         });
 
         it("calls the callback with an error when encoding failed", done => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const path = `${__dirname}/../../tmp-write-callback-error-encoding.png`;
             writePngFile(path, Buffer.alloc(2), options, error => {
                 expect(error).toMatchSnapshot();
@@ -184,7 +155,7 @@ describe("writePngFile", () => {
         });
 
         it("calls the callback with an error when writing failed", done => {
-            const options = { width: 16, alpha: false };
+            const options = { width: 16, height: 8 };
             const path = `this-file/does/not/exist.png`;
             writePngFile(path, someOrangeRectangle, options, error => {
                 expect(error).toBeTruthy();

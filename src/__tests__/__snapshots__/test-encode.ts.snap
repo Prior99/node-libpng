@@ -1,41 +1,33 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`encode encodes a PNG with {"height":8,"alpha":false} as options 1`] = `"89504e470d0a1a0a0000000d49484452000000100000000808020000007f14e8c0000000174944415418d363fcdfe0c0400a606220118c6a20060000b79f01cf914739e30000000049454e44ae426082"`;
-
-exports[`encode encodes a PNG with {"width":16,"alpha":false} as options 1`] = `"89504e470d0a1a0a0000000d49484452000000100000000808020000007f14e8c0000000174944415418d363fcdfe0c0400a606220118c6a20060000b79f01cf914739e30000000049454e44ae426082"`;
-
-exports[`encode encodes a PNG with {"width":16,"height":8,"alpha":false} as options 1`] = `"89504e470d0a1a0a0000000d49484452000000100000000808020000007f14e8c0000000174944415418d363fcdfe0c0400a606220118c6a20060000b79f01cf914739e30000000049454e44ae426082"`;
+exports[`encode encodes a PNG with {"width":16,"height":8} as options 1`] = `"89504e470d0a1a0a0000000d49484452000000100000000808020000007f14e8c0000000174944415418d363fcdfe0c0400a606220118c6a20060000b79f01cf914739e30000000049454e44ae426082"`;
 
 exports[`encode encodes a png 1`] = `"89504e470d0a1a0a0000000d4948445200000100000001000802000000d3103f31000002024944415478daedd3010900000c024185f5cfbc026bb03b4c207c93d4eceb260dbc250004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200012000012000100008000400020001800040002000100008000400020001800040002000100008000400020001800040002000100008000400020001800040002000100008000400020001800040002000100008000400020001800040002000100008000180004000200010000800040002000180004000200010000800040002000180004000200010000800040002000180004000200010000800040002000180004000200010000800040002000180004000200010000800040002000180004000084000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000240004e400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000200018000400020001000080004000280cb021a6505fccfd059aa0000000049454e44ae426082"`;
 
 exports[`encode encodes a png with an alpha channel 1`] = `"89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000001d4944415438cb637468706860a00030315008460d183560d480c1620000596a01a0768b6c110000000049454e44ae426082"`;
 
-exports[`encode throws an error when trying to encode a PNG with an alpha channel with alpha specified as disabled 1`] = `"Error encoding PNG.Invalid buffer length."`;
-
 exports[`encode throws an error when trying to encode something which isn't a buffer 1`] = `"Input is not a buffer."`;
 
 exports[`encode throws an error with bad options "string" 1`] = `"Options need to be an object."`;
 
-exports[`encode throws an error with bad options {"alpha":false} 1`] = `"Error encoding PNG. Either width or height need to be specified."`;
+exports[`encode throws an error with bad options {"width":"twenty","height":10} 1`] = `"Error encoding PNG. Width and height need to be specified."`;
 
-exports[`encode throws an error with bad options {"width":"twenty","alpha":true} 1`] = `"Error encoding PNG. Either width or height need to be specified."`;
+exports[`encode throws an error with bad options {"width":0,"height":0} 1`] = `"Error encoding PNG. Unsupported color type."`;
 
-exports[`encode throws an error with bad options {"width":0,"height":0,"alpha":true} 1`] = `"Error encoding PNG.Invalid buffer length."`;
+exports[`encode throws an error with bad options {"width":1.5,"height":20} 1`] = `"Error encoding PNG. Width needs to be an integer."`;
 
-exports[`encode throws an error with bad options {"width":1.5,"height":20,"alpha":true} 1`] = `"Error encoding PNG. Width needs to be an integer."`;
+exports[`encode throws an error with bad options {"width":20,"height":1.5} 1`] = `"Error encoding PNG. Height needs to be an integer."`;
 
-exports[`encode throws an error with bad options {"width":20,"alpha":"false"} 1`] = `"Error encoding PNG. Alpha channel needs to be explicitly specified."`;
+exports[`encode throws an error with bad options {"width":20} 1`] = `"Error encoding PNG. Width and height need to be specified."`;
 
-exports[`encode throws an error with bad options {"width":20,"height":1.5,"alpha":true} 1`] = `"Error encoding PNG. Height needs to be an integer."`;
+exports[`encode throws an error with bad options {"width":1000,"height":1000} 1`] = `"Error encoding PNG. Unsupported color type."`;
 
-exports[`encode throws an error with bad options {"width":1000,"height":1000,"alpha":true} 1`] = `"Error encoding PNG.Invalid buffer length."`;
-
-exports[`encode throws an error with bad options {} 1`] = `"Error encoding PNG. Either width or height need to be specified."`;
+exports[`encode throws an error with bad options {} 1`] = `"Error encoding PNG. Width and height need to be specified."`;
 
 exports[`encode throws an error with bad options null 1`] = `"Options need to be an object."`;
 
 exports[`encode throws an error with bad options undefined 1`] = `"Options need to be an object."`;
 
-exports[`writePngFile using the Promise API rejects with an error when encoding failed 1`] = `[TypeError: Error encoding PNG.]`;
+exports[`writePngFile using the Promise API rejects with an error when encoding failed 1`] = `[Error: Error encoding PNG. Unsupported color type.]`;
 
-exports[`writePngFile using the callback API calls the callback with an error when encoding failed 1`] = `[TypeError: Error encoding PNG.]`;
+exports[`writePngFile using the callback API calls the callback with an error when encoding failed 1`] = `[Error: Error encoding PNG. Unsupported color type.]`;

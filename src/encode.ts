@@ -3,23 +3,20 @@ import { __native_encode } from "./native";
 
 export interface EncodeOptions {
     /**
-     * The width of the image to be encoded in pixels. Either `width` or `height` or both need
-     * to be specified.
+     * The width of the image to be encoded in pixels.
      */
-    width?: number;
+    width: number;
     /**
-     * The height of the image to be encoded in pixels. Either `width` or `height` or both need
-     * to be specified.
+     * The height of the image to be encoded in pixels.
      */
     height?: number;
-    /**
-     * Whether the buffer to encode contains an alpha channel.
-     */
-    alpha: boolean;
 }
 
 /**
  * Encode a buffer of raw RGB or RGBA image data into PNG format.
+ * Only RGB and RGBA color formats are supported. This function will automatically calculate whether an
+ * alpha channel is present by calculating the amount of bytes per pixel from the length of the buffer
+ * and the provided `width` and `height`. Only 8bit colors are supported.
  *
  * @param buffer The buffer of raw pixel data to encode.
  * @param options Options used to encode the image.
@@ -33,30 +30,21 @@ export function encode(buffer: Buffer, options: EncodeOptions): Buffer {
     if (typeof options !== "object" || options === null) {
         throw new Error("Options need to be an object.");
     }
-    const { alpha } = options;
-    const bytesPerPixel = alpha ? 4 : 3;
     let { width, height } = options;
-    if (typeof width !== "number" && typeof height !== "number") {
-        throw new Error("Error encoding PNG. Either width or height need to be specified.");
+    if (typeof width !== "number" || typeof height !== "number") {
+        throw new Error("Error encoding PNG. Width and height need to be specified.");
     }
-    if (typeof width === "number" && !Number.isInteger(width)) {
+    if (!Number.isInteger(width)) {
         throw new Error("Error encoding PNG. Width needs to be an integer.");
     }
-    if (typeof height === "number" && !Number.isInteger(height)) {
+    if (!Number.isInteger(height)) {
         throw new Error("Error encoding PNG. Height needs to be an integer.");
     }
-    if (typeof alpha !== "boolean") {
-        throw new Error("Error encoding PNG. Alpha channel needs to be explicitly specified.");
+    const bytesPerPixel = buffer.length / (width * height);
+    if (bytesPerPixel !== 3 && bytesPerPixel !== 4) {
+        throw new Error("Error encoding PNG. Unsupported color type.");
     }
-    if (typeof height !== "number") {
-        height = buffer.length / (bytesPerPixel * width);
-    }
-    if (typeof width !== "number") {
-        width = buffer.length / (bytesPerPixel * height);
-    }
-    if (buffer.length !== height * width * bytesPerPixel) {
-        throw new Error("Error encoding PNG.Invalid buffer length.");
-    }
+    const alpha = bytesPerPixel === 4;
     return __native_encode(buffer, width, height, alpha);
 }
 
