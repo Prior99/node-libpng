@@ -156,20 +156,20 @@ In order to use the Promise-based API, simply omit the 4th argument.
 import { writePngFile } from "node-libpng";
 
 async function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file with no alpha channel.
+    // Let's write a 100x60 pixel PNG file.
     const imageData = Buffer.alloc(100 * 60 * 3);
     // TODO: Manipulate the image data somehow.
     const options = {
         width: 100,
-        height: 60,
-        alpha: false
+        height: 60
     };
     await writePngFile("path/to/image.png", imageData, options);
     console.log("File successfully written.");
 }
 ```
 
-In this example, a 100x60 pixel image with no alpha channel will be encoded and written to disk.
+In this example, a 100x60 pixel image will be encoded and written to disk.
+Based on the length of the buffer and the provided dimensions the presence of an alpha channel will be automatically calculated.
 
 It is possible to omit either `width` or `height` from the options.
 
@@ -184,13 +184,12 @@ In order to use the callback-based API, provide a callback as the 4th argument.
 import { writePngFile } from "node-libpng";
 
 function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file with no alpha channel.
+    // Let's write a 100x60 pixel PNG file.
     const imageData = Buffer.alloc(100 * 60 * 3);
     // TODO: Manipulate the image data somehow.
     const options = {
         width: 100,
-        height: 60,
-        alpha: false
+        height: 60
     };
     await writePngFile("path/to/image.png", imageData, options, (error) => {
         if (error !== null) {
@@ -201,7 +200,8 @@ function writeMyFile() {
 }
 ```
 
-In this example, a 100x60 pixel image with no alpha channel will be encoded and written to disk.
+In this example, a 100x60 pixel image will be encoded and written to disk.
+Based on the length of the buffer and the provided dimensions the presence of an alpha channel will be automatically calculated.
 
 It is possible to omit either `width` or `height` from the options.
 
@@ -216,20 +216,20 @@ It is possible to write the image to disk in a blocking way, using Node's `write
 import { writePngFileSync } from "node-libpng";
 
 function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file with no alpha channel.
+    // Let's write a 100x60 pixel PNG file.
     const imageData = Buffer.alloc(100 * 60 * 3);
     // TODO: Manipulate the image data somehow.
     const options = {
         width: 100,
-        height: 60,
-        alpha: false
+        height: 60
     };
     writePngFileSync("path/to/image.png", imageData, options);
     console.log("File successfully written.");
 }
 ```
 
-In this example, a 100x60 pixel image with no alpha channel will be encoded and written to disk.
+In this example, a 100x60 pixel image will be encoded and written to disk.
+Based on the length of the buffer and the provided dimensions the presence of an alpha channel will be automatically calculated.
 
 It is possible to omit either `width` or `height` from the options.
 
@@ -246,8 +246,7 @@ function encodeMyBuffer() {
     const buffer = ...; // Some buffer containing the raw pixel data.
     const options = {
         width: 100,
-        height: 100,
-        alpha: false
+        height: 100
     };
     const encodedPngData = encode(buffer);
     // The Buffer `encodedPngData` now contains the raw PNG-encoded data.
@@ -255,6 +254,7 @@ function encodeMyBuffer() {
 }
 ```
 
+Based on the length of the buffer and the provided dimensions the presence of an alpha channel will be automatically calculated.
 If an error occured while encoding the buffer, it will be `throw`n.
 The encoding happens synchroneously.
 
