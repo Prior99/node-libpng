@@ -1,6 +1,15 @@
 {
   "name": "node-libpng",
-  "version": "0.2.0",
+  "keywords": [
+    "png",
+    "libpng",
+    "decoder",
+    "encoder",
+    "node-png",
+    "pngjs",
+    "node-libpng"
+  ],
+  "version": "0.2.2",
   "description": "Unofficial bindings for node to libpng.",
   "main": "dist/index.js",
   "author": "Frederick Gnodtke",
