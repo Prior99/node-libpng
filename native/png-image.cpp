@@ -129,7 +129,7 @@ NAN_METHOD(PngImage::New) {
         for (size_t i = 0; i < args.size(); ++i) {
             args[i] = info[i];
         }
-        auto instance = Nan::NewInstance(info.Callee(), args.size(), args.data());
+        auto instance = Nan::NewInstance(Nan::New(constructor), args.size(), args.data());
         if (!instance.IsEmpty()) {
             info.GetReturnValue().Set(instance.ToLocalChecked());
         }
