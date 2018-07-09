@@ -9,8 +9,8 @@ if (process.env["NODE_LIBPNG_SKIP_BINARY_DOWNLOAD_FOR_CI"]) { return; }
 // Get the version of the library;
 const pkg = require(path.resolve(__dirname, "..", "package.json"));
 const packageVersion = pkg.version;
-const binarySite = process.env.LIBPNG_BINARY_SITE || "https://github.com/Prior99/node-libpng/releases/download";
-const url = `${binarySite}/${packageVersion}/${fileName.baseName}`;
+const baseUrl = process.env.NODE_LIBPNG_BINARY_URL || "https://github.com/Prior99/node-libpng/releases/download";
+const url = `${baseUrl}/${packageVersion}/${fileName.baseName}`;
 
 console.info(`Downloading node-libpng prebuilt binary from "${url}".`);
 
