@@ -14,11 +14,11 @@ NAN_METHOD(encode) {
     Local<Object> inputBuffer = Local<Object>::Cast(info[0]);
     uint8_t *input = reinterpret_cast<uint8_t*>(Buffer::Data(inputBuffer));
     // 2nd Parameter: The width of the image to encode.
-    const auto width = static_cast<uint32_t>(info[1]->NumberValue());
+    const auto width = static_cast<uint32_t>(Nan::To<uint32_t>(info[1]).ToChecked());
     // 3rd Parameter: The height of the image to encode.
-    const auto height = static_cast<uint32_t>(info[2]->NumberValue());
+    const auto height = static_cast<uint32_t>(Nan::To<uint32_t>(info[2]).ToChecked());
     // 4th Parameter: Whether to use alpha channel or not.
-    const auto alpha = static_cast<bool>(info[3]->BooleanValue());
+    const auto alpha = static_cast<bool>(Nan::To<bool>(info[3]).ToChecked());
     // calculate derived parameters.
     const auto colorType = alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     const auto rowBytes = (alpha ? 4 : 3) * width;
@@ -71,5 +71,5 @@ NAN_METHOD(encode) {
 }
 
 NAN_MODULE_INIT(InitEncode) {
-    target->Set(Nan::New("__native_encode").ToLocalChecked(), Nan::New<FunctionTemplate>(encode)->GetFunction());
+    target->Set(Nan::New("__native_encode").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(encode)).ToLocalChecked());
 }

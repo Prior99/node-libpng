@@ -71,11 +71,11 @@
   },
   "devDependencies": {
     "@types/jest": "^21.1.7",
-    "@types/node": "^9.4.7",
+    "@types/node": "^13.7.0",
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.4",
     "jest": "^21.2.1",
-    "nan": "^2.9.2",
+    "nan": "^2.14.0",
     "node-gyp": "^3.6.2",
     "ts-jest": "^21.2.3",
     "tslint": "^5.8.0",

@@ -17,29 +17,29 @@ NAN_METHOD(resize) {
     auto lengthIn = Buffer::Length(inputBuffer);
     auto *dataIn = reinterpret_cast<uint8_t*>(Buffer::Data(inputBuffer));
     // 2nd Parameter: The old width.
-    const auto oldWidth = static_cast<uint32_t>(info[1]->NumberValue());
+    const auto oldWidth = static_cast<uint32_t>(Nan::To<uint32_t>(info[1]).ToChecked());
     // 3rd Parameter: The old height.
-    const auto oldHeight = static_cast<uint32_t>(info[2]->NumberValue());
+    const auto oldHeight = static_cast<uint32_t>(Nan::To<uint32_t>(info[2]).ToChecked());
     // 4th Parameter: The new width.
-    const auto newWidth = static_cast<uint32_t>(info[3]->NumberValue());
+    const auto newWidth = static_cast<uint32_t>(Nan::To<uint32_t>(info[3]).ToChecked());
     // 5th Parameter: The new height.
-    const auto newHeight = static_cast<uint32_t>(info[4]->NumberValue());
+    const auto newHeight = static_cast<uint32_t>(Nan::To<uint32_t>(info[4]).ToChecked());
     // 6th Parameter: The padding left.
-    const auto outerPaddingLeft = static_cast<uint32_t>(info[5]->NumberValue());
+    const auto outerPaddingLeft = static_cast<uint32_t>(Nan::To<uint32_t>(info[5]).ToChecked());
     // 7th Parameter: The padding top.
-    const auto outerPaddingTop = static_cast<uint32_t>(info[6]->NumberValue());
+    const auto outerPaddingTop = static_cast<uint32_t>(Nan::To<uint32_t>(info[6]).ToChecked());
     // 8th Parameter: The padding left.
-    const auto innerPaddingLeft = static_cast<uint32_t>(info[7]->NumberValue());
+    const auto innerPaddingLeft = static_cast<uint32_t>(Nan::To<uint32_t>(info[7]).ToChecked());
     // 9th Parameter: The padding top.
-    const auto innerPaddingTop = static_cast<uint32_t>(info[8]->NumberValue());
+    const auto innerPaddingTop = static_cast<uint32_t>(Nan::To<uint32_t>(info[8]).ToChecked());
     // 10th Parameter: The padding left.
-    const auto innerWidth = static_cast<uint32_t>(info[9]->NumberValue());
+    const auto innerWidth = static_cast<uint32_t>(Nan::To<uint32_t>(info[9]).ToChecked());
     // 11th Parameter: The padding top.
-    const auto innerHeight = static_cast<uint32_t>(info[10]->NumberValue());
+    const auto innerHeight = static_cast<uint32_t>(Nan::To<uint32_t>(info[10]).ToChecked());
     // 12th Parameter: The fill color as an array.
     Local<Array> fillColor = Local<Array>::Cast(info[11]);
     // 13th Parameter: The bit depth.
-    const auto bitDepth = static_cast<uint32_t>(info[12]->NumberValue());
+    const auto bitDepth = static_cast<uint32_t>(Nan::To<uint32_t>(info[12]).ToChecked());
 
     // Computed values.
     const auto bytesPerColor = std::ceil(static_cast<double>(bitDepth) / 8.0);
@@ -58,7 +58,7 @@ NAN_METHOD(resize) {
 
     std::vector<uint32_t> colorValues;
     for (uint32_t colorIndex = 0; colorIndex < fillColor->Length(); ++colorIndex) {
-        colorValues.push_back(static_cast<uint32_t>(fillColor->Get(colorIndex)->NumberValue()));
+        colorValues.push_back(static_cast<uint32_t>(Nan::To<uint32_t>(fillColor->Get(colorIndex)).ToChecked()));
     }
     for (uint32_t index = 0; index < lengthOut; index += bytesPerPixel) {
         for (uint32_t colorIndex = 0; colorIndex < bytesPerPixel; ++colorIndex) {
@@ -80,5 +80,5 @@ NAN_METHOD(resize) {
 }
 
 NAN_MODULE_INIT(InitResize) {
-    target->Set(Nan::New("__native_resize").ToLocalChecked(), Nan::New<FunctionTemplate>(resize)->GetFunction());
+    target->Set(Nan::New("__native_resize").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(resize)).ToLocalChecked());
 }

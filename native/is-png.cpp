@@ -24,5 +24,5 @@ NAN_METHOD(isPng) {
 }
 
 NAN_MODULE_INIT(InitIsPng) {
-    target->Set(Nan::New("__native_isPng").ToLocalChecked(), Nan::New<FunctionTemplate>(isPng)->GetFunction());
+    target->Set(Nan::New("__native_isPng").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(isPng)).ToLocalChecked());
 }

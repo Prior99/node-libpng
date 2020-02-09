@@ -39,9 +39,9 @@ NAN_MODULE_INIT(PngImage::Init) {
     Nan::SetAccessor(ctorInstance, Nan::New("palette").ToLocalChecked(), PngImage::getPalette);
     Nan::SetAccessor(ctorInstance, Nan::New("gamma").ToLocalChecked(), PngImage::getGamma);
     // Make sure the constructor stays persisted by storing it in a `Nan::Persistant`.
-    constructor.Reset(ctor->GetFunction());
+    constructor.Reset(Nan::GetFunction(ctor).ToLocalChecked());
     // Store `NativePngImage` in the module's exports.
-    Nan::Set(target, Nan::New("__native_PngImage").ToLocalChecked(), ctor->GetFunction());
+    Nan::Set(target, Nan::New("__native_PngImage").ToLocalChecked(), Nan::GetFunction(ctor).ToLocalChecked());
 }
 
 /*
