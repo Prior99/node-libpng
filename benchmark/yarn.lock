@@ -79,10 +79,10 @@ boom@5.x.x:
     hoek "4.x.x"
 
 canvas@1.6.*:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.9.tgz#e3f95cec7b16bf2d6f3fc725c02d940d3258f69b"
+  version "1.6.13"
+  resolved "https://registry.yarnpkg.com/canvas/-/canvas-1.6.13.tgz#8cb4e9abbea9e615a377890ffac50277a1167c73"
   dependencies:
-    nan "^2.4.0"
+    nan "^2.10.0"
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -380,14 +380,13 @@ ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
 
-nan@^2.4.0, nan@^2.9.2:
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
+nan@^2.10.0:
+  version "2.14.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
 
 "node-libpng@file:..":
-  version "0.0.4"
+  version "0.2.7"
   dependencies:
-    nan "^2.9.2"
     request "^2.85.0"
 
 "nwmatcher@>= 1.3.7 < 2.0.0":
