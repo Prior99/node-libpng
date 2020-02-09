@@ -66,7 +66,7 @@
     - provider: GitHub
       artifact: node-libpng
       auth_token:
-        secure: +wXtQW8okFkZw+VEkv7Fx4+/G5syQCY02dvOSTTew+/Bp9F8dOiI+pIQaJ8VhLPW
+        secure: ik15UkTkBf82DZ3+VHAX0jQA19IpLe91Y0yJ3j33QGYz99qve8yJzjVQJHNjBuzz
       draft: false
       prerelease: false
       on:
