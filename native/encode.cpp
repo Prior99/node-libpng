@@ -71,5 +71,5 @@ NAN_METHOD(encode) {
 }
 
 NAN_MODULE_INIT(InitEncode) {
-    target->Set(Nan::New("__native_encode").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(encode)).ToLocalChecked());
+    Nan::Set(target, Nan::New("__native_encode").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(encode)).ToLocalChecked());
 }

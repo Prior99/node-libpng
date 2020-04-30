@@ -50,5 +50,5 @@ NAN_METHOD(copy) {
 }
 
 NAN_MODULE_INIT(InitCopy) {
-    target->Set(Nan::New("__native_copy").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(copy)).ToLocalChecked());
+    Nan::Set(target, Nan::New("__native_copy").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(copy)).ToLocalChecked());
 }

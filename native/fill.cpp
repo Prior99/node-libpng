@@ -46,7 +46,7 @@ NAN_METHOD(fill) {
     // Copy the color into a vector for faster access.
     std::vector<uint32_t> colorValues;
     for (uint32_t colorIndex = 0; colorIndex < fillColor->Length(); ++colorIndex) {
-        colorValues.push_back(static_cast<uint32_t>(Nan::To<uint32_t>(fillColor->Get(colorIndex)).ToChecked()));
+        colorValues.push_back(static_cast<uint32_t>(Nan::To<uint32_t>(Nan::Get(fillColor, colorIndex).ToLocalChecked()).ToChecked()));
     }
     // Now fill the rectangle
     for (uint32_t y = offsetTop; y < offsetTop + height; ++y) {
@@ -60,5 +60,5 @@ NAN_METHOD(fill) {
 }
 
 NAN_MODULE_INIT(InitFill) {
-    target->Set(Nan::New("__native_fill").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(fill)).ToLocalChecked());
+    Nan::Set(target, Nan::New("__native_fill").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(fill)).ToLocalChecked());
 }

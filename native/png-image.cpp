@@ -281,12 +281,12 @@ NAN_GETTER(PngImage::getTime) {
     }
     // Copy the struct into a JS object.
     Local<Object> returnValue = Nan::New<Object>();
-    returnValue->Set(Nan::New("year").ToLocalChecked(), Nan::New(static_cast<double>(time->year)));
-    returnValue->Set(Nan::New("month").ToLocalChecked(), Nan::New(static_cast<double>(time->month)));
-    returnValue->Set(Nan::New("day").ToLocalChecked(), Nan::New(static_cast<double>(time->day)));
-    returnValue->Set(Nan::New("hour").ToLocalChecked(), Nan::New(static_cast<double>(time->hour)));
-    returnValue->Set(Nan::New("minute").ToLocalChecked(), Nan::New(static_cast<double>(time->minute)));
-    returnValue->Set(Nan::New("second").ToLocalChecked(), Nan::New(static_cast<double>(time->second)));
+    Nan::Set(returnValue, Nan::New("year").ToLocalChecked(), Nan::New(static_cast<double>(time->year)));
+    Nan::Set(returnValue, Nan::New("month").ToLocalChecked(), Nan::New(static_cast<double>(time->month)));
+    Nan::Set(returnValue, Nan::New("day").ToLocalChecked(), Nan::New(static_cast<double>(time->day)));
+    Nan::Set(returnValue, Nan::New("hour").ToLocalChecked(), Nan::New(static_cast<double>(time->hour)));
+    Nan::Set(returnValue, Nan::New("minute").ToLocalChecked(), Nan::New(static_cast<double>(time->minute)));
+    Nan::Set(returnValue, Nan::New("second").ToLocalChecked(), Nan::New(static_cast<double>(time->second)));
     info.GetReturnValue().Set(returnValue);
 }
 
@@ -295,17 +295,17 @@ Local<Object> PngImage::convertColor(png_color_16p color) {
     Local<Object> convertedColor = Nan::New<Object>();
     switch (png_get_color_type(this->pngPtr, this->infoPtr)) {
         case PNG_COLOR_TYPE_PALETTE:
-            convertedColor->Set(Nan::New("index").ToLocalChecked(), Nan::New(static_cast<double>(color->index)));
+            Nan::Set(convertedColor, Nan::New("index").ToLocalChecked(), Nan::New(static_cast<double>(color->index)));
             break;
         case PNG_COLOR_TYPE_GRAY:
         case PNG_COLOR_TYPE_GRAY_ALPHA:
-            convertedColor->Set(Nan::New("gray").ToLocalChecked(), Nan::New(static_cast<double>(color->gray)));
+            Nan::Set(convertedColor, Nan::New("gray").ToLocalChecked(), Nan::New(static_cast<double>(color->gray)));
             break;
         case PNG_COLOR_TYPE_RGB:
         case PNG_COLOR_TYPE_RGB_ALPHA:
-            convertedColor->Set(Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
-            convertedColor->Set(Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
-            convertedColor->Set(Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
+            Nan::Set(convertedColor, Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
+            Nan::Set(convertedColor, Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
+            Nan::Set(convertedColor, Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
             break;
     }
     return convertedColor;
@@ -313,9 +313,9 @@ Local<Object> PngImage::convertColor(png_color_16p color) {
 
 Local<Object> PngImage::convertColor(png_colorp color) {
     Local<Object> convertedColor = Nan::New<Object>();
-    convertedColor->Set(Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
-    convertedColor->Set(Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
-    convertedColor->Set(Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
+    Nan::Set(convertedColor, Nan::New("red").ToLocalChecked(), Nan::New(static_cast<double>(color->red)));
+    Nan::Set(convertedColor, Nan::New("green").ToLocalChecked(), Nan::New(static_cast<double>(color->green)));
+    Nan::Set(convertedColor, Nan::New("blue").ToLocalChecked(), Nan::New(static_cast<double>(color->blue)));
     return convertedColor;
 }
 

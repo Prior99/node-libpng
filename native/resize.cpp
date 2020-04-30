@@ -58,7 +58,7 @@ NAN_METHOD(resize) {
 
     std::vector<uint32_t> colorValues;
     for (uint32_t colorIndex = 0; colorIndex < fillColor->Length(); ++colorIndex) {
-        colorValues.push_back(static_cast<uint32_t>(Nan::To<uint32_t>(fillColor->Get(colorIndex)).ToChecked()));
+        colorValues.push_back(static_cast<uint32_t>(Nan::To<uint32_t>(Nan::Get(fillColor, colorIndex).ToLocalChecked()).ToChecked()));
     }
     for (uint32_t index = 0; index < lengthOut; index += bytesPerPixel) {
         for (uint32_t colorIndex = 0; colorIndex < bytesPerPixel; ++colorIndex) {
@@ -80,5 +80,5 @@ NAN_METHOD(resize) {
 }
 
 NAN_MODULE_INIT(InitResize) {
-    target->Set(Nan::New("__native_resize").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(resize)).ToLocalChecked());
+    Nan::Set(target, Nan::New("__native_resize").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(resize)).ToLocalChecked());
 }
