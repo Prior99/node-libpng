@@ -44,10 +44,8 @@ export function encode(buffer: Buffer, options: EncodeOptions): Buffer {
     if (!Number.isInteger(height)) {
         throw new Error("Error encoding PNG. Height needs to be an integer.");
     }
-    if (compressionLevel !== undefined) {
-        if (!Number.isInteger(compressionLevel) || compressionLevel < 0 || compressionLevel > 9) {
-            throw new Error("Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9.");
-        }
+    if (!Number.isInteger(compressionLevel) || compressionLevel < 0 || compressionLevel > 9) {
+        throw new Error("Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9.");
     }
     const bytesPerPixel = buffer.length / (width * height);
     if (bytesPerPixel !== 3 && bytesPerPixel !== 4) {
