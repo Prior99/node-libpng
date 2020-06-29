@@ -20,7 +20,7 @@ NAN_METHOD(encode) {
     // 4th Parameter: Whether to use alpha channel or not.
     const auto alpha = static_cast<bool>(Nan::To<bool>(info[3]).ToChecked());
     // 5th Parameter: Compression level, default to best compression
-    const auto compression = static_cast<bool>(Nan::To<uint32_t>(info[3]).FromMaybe(Z_BEST_COMPRESSION));
+    const auto compression = static_cast<uint32_t>(Nan::To<uint32_t>(info[4]).FromMaybe(Z_BEST_COMPRESSION));
     // calculate derived parameters.
     const auto colorType = alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     const auto rowBytes = (alpha ? 4 : 3) * width;

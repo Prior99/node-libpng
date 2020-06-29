@@ -34,7 +34,7 @@ export function encode(buffer: Buffer, options: EncodeOptions): Buffer {
     if (typeof options !== "object" || options === null) {
         throw new Error("Options need to be an object.");
     }
-    let { width, height, compressionLevel } = options;
+    let { width, height, compressionLevel = 9 } = options;
     if (typeof width !== "number" || typeof height !== "number") {
         throw new Error("Error encoding PNG. Width and height need to be specified.");
     }
