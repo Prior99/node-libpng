@@ -35,6 +35,15 @@ describe("encode", () => {
         expect(encoded.toString("hex")).toMatchSnapshot();
     });
 
+    it("encodes a png with given compression level", () => {
+        const encoded = encode(someGradient, {
+            width: 256,
+            height: 256,
+            compressionLevel: 5,
+        });
+        expect(encoded.toString("hex")).toMatchSnapshot();
+    });
+
     it("encodes a png with an alpha channel", () => {
         const encoded = encode(someOpaqueSquare, {
             width: 16,
@@ -89,6 +98,26 @@ describe("encode", () => {
         {
             width: 1000,
             height: 1000,
+        },
+        {
+            width: 16,
+            height: 8,
+            compressionLevel: "x",
+        },
+        {
+            width: 16,
+            height: 8,
+            compressionLevel: 1.5,
+        },
+        {
+            width: 16,
+            height: 8,
+            compressionLevel: -1,
+        },
+        {
+            width: 16,
+            height: 8,
+            compressionLevel: 10,
         },
     ].forEach(options => {
         it(`throws an error with bad options ${JSON.stringify(options)}`, () => {

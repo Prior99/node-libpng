@@ -6,6 +6,8 @@ exports[`encode encodes a png 1`] = `"89504e470d0a1a0a0000000d494844520000010000
 
 exports[`encode encodes a png with an alpha channel 1`] = `"89504e470d0a1a0a0000000d49484452000000100000001008060000001ff3ff610000001d4944415438cb637468706860a00030315008460d183560d480c1620000596a01a0768b6c110000000049454e44ae426082"`;
 
+exports[`encode encodes a png with given compression level 1`] = `"89504e470d0a1a0a0000000d4948445200000100000001000802000000d3103f31000002bb49444154785eedd30109003010c4b07b987fcd13d2845ae86d3ba9dadb0db20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a419803403906600d20c409a01483300690620cd00a41980b40f1a6505fc3f953d310000000049454e44ae426082"`;
+
 exports[`encode throws an error when trying to encode something which isn't a buffer 1`] = `"Input is not a buffer."`;
 
 exports[`encode throws an error with bad options "string" 1`] = `"Options need to be an object."`;
@@ -15,6 +17,14 @@ exports[`encode throws an error with bad options {"width":"twenty","height":10} 
 exports[`encode throws an error with bad options {"width":0,"height":0} 1`] = `"Error encoding PNG. Unsupported color type."`;
 
 exports[`encode throws an error with bad options {"width":1.5,"height":20} 1`] = `"Error encoding PNG. Width needs to be an integer."`;
+
+exports[`encode throws an error with bad options {"width":16,"height":8,"compressionLevel":"x"} 1`] = `"Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9."`;
+
+exports[`encode throws an error with bad options {"width":16,"height":8,"compressionLevel":-1} 1`] = `"Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9."`;
+
+exports[`encode throws an error with bad options {"width":16,"height":8,"compressionLevel":1.5} 1`] = `"Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9."`;
+
+exports[`encode throws an error with bad options {"width":16,"height":8,"compressionLevel":10} 1`] = `"Error encoding PNG. CompressionLevel needs to be an integer between 0 and 9."`;
 
 exports[`encode throws an error with bad options {"width":20,"height":1.5} 1`] = `"Error encoding PNG. Height needs to be an integer."`;
 

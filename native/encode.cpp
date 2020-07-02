@@ -19,6 +19,8 @@ NAN_METHOD(encode) {
     const auto height = static_cast<uint32_t>(Nan::To<uint32_t>(info[2]).ToChecked());
     // 4th Parameter: Whether to use alpha channel or not.
     const auto alpha = static_cast<bool>(Nan::To<bool>(info[3]).ToChecked());
+    // 5th Parameter: Compression level, default to best compression
+    const auto compression = static_cast<uint32_t>(Nan::To<uint32_t>(info[4]).FromMaybe(Z_BEST_COMPRESSION));
     // calculate derived parameters.
     const auto colorType = alpha ? PNG_COLOR_TYPE_RGBA : PNG_COLOR_TYPE_RGB;
     const auto rowBytes = (alpha ? 4 : 3) * width;
@@ -49,8 +51,8 @@ NAN_METHOD(encode) {
         auto encoded = reinterpret_cast<vector<uint8_t>*>(png_get_io_ptr(pngPtr));
         encoded->insert(encoded->end(), data, data + length);
     }, nullptr);
-    // Use best compression.
-    png_set_compression_level(pngPtr, Z_BEST_COMPRESSION);
+    // Use passed compression level.
+    png_set_compression_level(pngPtr, compression);
     // Initialize write call with available options such as `width`, `height`, etc.
     png_set_IHDR(pngPtr, infoPtr, width, height, 8, colorType, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
     // A vector is used to address each row of the image inside the 1-dimensional `input` array.
