@@ -68,6 +68,9 @@ NAN_METHOD(encode) {
     png_write_info(pngPtr, infoPtr);
     png_write_rows(pngPtr, &rows[0], height);
     png_write_end(pngPtr, nullptr);
+    // Free libpng write struct.
+    png_free_data(pngPtr, infoPtr, PNG_FREE_ALL, -1);
+    png_destroy_write_struct(&pngPtr, &infoPtr);
     // Return created encoded image as a buffer. Needs to be a copy as the vector from above will be freed.
     info.GetReturnValue().Set(Nan::CopyBuffer(reinterpret_cast<char*>(&encoded[0]), encoded.size()).ToLocalChecked());
 }
