@@ -21,6 +21,9 @@ jobs:
       node_js: "14"
       os: linux
     - stage: build
+      node_js: "15"
+      os: linux
+    - stage: build
       node_js: "10"
       os: osx
     - stage: build
@@ -34,6 +37,9 @@ jobs:
       os: osx
     - stage: build
       node_js: "14"
+      os: osx
+    - stage: build
+      node_js: "15"
       os: osx
 addons:
   apt:
