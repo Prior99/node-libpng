@@ -28,13 +28,7 @@
       - nodejs_version: 10
         GYP_MSVS_VERSION: 2015
         APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      - nodejs_version: 11
-        GYP_MSVS_VERSION: 2015
-        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       - nodejs_version: 12
-        GYP_MSVS_VERSION: 2015
-        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      - nodejs_version: 13
         GYP_MSVS_VERSION: 2015
         APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       - nodejs_version: 14
@@ -99,13 +93,7 @@
       - nodejs_version: 10
         GYP_MSVS_VERSION: 2015
         APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      - nodejs_version: 11
-        GYP_MSVS_VERSION: 2015
-        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       - nodejs_version: 12
-        GYP_MSVS_VERSION: 2015
-        APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      - nodejs_version: 13
         GYP_MSVS_VERSION: 2015
         APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       - nodejs_version: 14
