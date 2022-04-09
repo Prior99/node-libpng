@@ -56,6 +56,10 @@ before_install:
   - yarn --version
 script:
   - make
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then
+      CFLAGS="-Wno-implicit-function-declaration" CPPFLAGS="-DPNG_ARM_NEON_OPT=0" yarn prebuild --arch=arm64;
+      ARCH="arm64" yarn postbuild;
+    fi
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 cache: yarn
