@@ -38,7 +38,8 @@ before_install:
   - node --version
   - yarn --version
 script:
-  - ZLIB_VERNUM=1 PNG_ZLIB_VERNUM=1 make
+  - sed -i '' '911s/^/\/\/ /' deps/libpng/pngpriv.h
+  - make
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 cache: yarn
