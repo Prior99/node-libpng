@@ -30,15 +30,15 @@ addons:
 before_install:
   - npm install -g yarn
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-7";
-      export CXX="g++-7";
-      export LINK="gcc-7";
-      export LINKXX="g++-7";
+    export CC="gcc-7";
+    export CXX="g++-7";
+    export LINK="gcc-7";
+    export LINKXX="g++-7";
     fi
   - node --version
   - yarn --version
 script:
-  - make
+  - ZLIB_VERNUM=1 PNG_ZLIB_VERNUM=1 make
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 cache: yarn
