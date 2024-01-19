@@ -34,11 +34,13 @@ before_install:
     export CXX="g++-7";
     export LINK="gcc-7";
     export LINKXX="g++-7";
+    sed -i '911s!^!//!' deps/libpng/pngpriv.h;
+    else
+    sed -i '' '911s/^/\/\/ /' deps/libpng/pngpriv.h;
     fi
   - node --version
   - yarn --version
 script:
-  - sed -i '' '911s/^/\/\/ /' deps/libpng/pngpriv.h
   - make
 after_script:
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
