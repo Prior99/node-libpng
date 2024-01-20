@@ -20,7 +20,7 @@ const baseUrl =
   process.env['NODE_LIBPNG_BINARY_URL'] ||
   process.env['npm_config_node_libpng_binary_url'] ||
   `${pkg.repository.url}/releases/download`;
-const url = `${baseUrl}/${packageVersion}/${fileName.baseName}`;
+const url = `${baseUrl}/v${packageVersion}/${fileName.baseName}`;
 
 console.info(`Downloading node-libpng prebuilt binary from "${url}".`);
 
