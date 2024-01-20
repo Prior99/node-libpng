@@ -42,13 +42,13 @@ before_install:
   - yarn --version
 script:
   - make
-after_script:
-  - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+# after_script:
+#   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
 cache: yarn
 deploy:
   provider: releases
   api_key:
-    secure: "JiSof20geLe50cqCVXJKYabfs7t4PiobD6uA2BZo4h2GM5U6JcuGhzxWZfz7tNvSwAG1Y01iPz+rS7R8rSZfwtqq5qWyPLt29sM1T9ivuunD3GDRFppDIIsZCaHABg3xP3CMYcwuN9S3thkjHMcOAKR+9SlQNyAWilHltZVtOa+ftwlkTzoIyAp3HkSFBbBT98BPi65oXUCVxR3mJqCoKZnTX0wl7RMpEFdCsZ1XmefdPEpFc7o2UhDRbl7RtcplybocEFzdcv7+d80rMCR0xG+mB8IpeuGdMfmXvX3DJO09dO3/yBhXnuyePZ1EgcZ8CLD/f+hQU5aFao2e8WaYrWPaxWkIfqWfkl0lOwzthK4sTxwkcFpK2BqxowDEjbB2POCNaYsabDvDpBSm9Fwp5aPOeqdzYVbKWPoYcbj8udacpst8S0s8kVis3ZmTDNzl+OR6EHlwubrUtQJRWZGGRg2JHReR2t/WPcQcwKF6t8q53DGdxD+xaYAq6MGjdmCM4WaparIGvUqWap38XjuTZar9Vc6eFqcPuM3R2QpInA44RIHJ0LjnVEn4rk6rduzT0orkgCTlvxeCOxOY9iHSGrKfmfTTf4Hp8klS0jSmxIBvsQ7gJyrSQiSogNnKg5nF4PYZUYVkwep0VhKKplOHj6y0OKZM14eoZNHzLXQqI/0="
+    secure: "sxgXwOuWBlTXmU1kHOJ2IBb00cbRnX+i9GdbFbnhxDx3pyb+tYOKg1G6RPqeaHzPd4+PIgJpMgHf4hHtqIxwLpAWgbxHdZ8exKNiyxAPomqyu/gIMjabtvSttk8IvW3kXkFifDh7ruuYC/d9AEz6rORvhUV8ZQ5F4DXg0fNgdWh8JUKglOgMW7rYN0ZJCfT8BH7NJlp6vA51/bNjga0oKSd3N+oNNZP5Cj4lYwRu84VlEzUy/S4g7MM/RyY9qJRzI8n5rdDQD48X3iAQBlIAgwHQ1nGsoaAkI14a9D0Kz0Rwuvr30+IqkuNKpb0x2fTgj/O594PKzbeliFt+lMESorVifFzalbj4SwBhXzej61lfSlprveA4khQjWGrpoTVATDKJG8AZskCTZl2RMtoIP22sJ6ub8HKpQeFjkcpfg1sRV1sTpIL9O42SrlkhCg68+s0wBnvRffSkbdn1wdstnswROrQjTylQRinbx9W3L+b7fBGx6GmjJ6nDbu3Qr+vua+JI9ep2DvgyGcPsuOkN3ZN9OHvWzQUEU8T27fc7U6Y4y98uxGINJUMAMYXhx4gUWmIrH4OwUQTuu6+HZ641xtuQ75QCJ9eHCckqYkqmW3eulNrRYEuUvGVMaBM9sR+bgkavKeYntvKLM8D/Nglt3utMREbaj1yMfYds0lOlkrc="
   file_glob: true
   file: "node-libpng-*-*-*.node"
   skip_cleanup: true
