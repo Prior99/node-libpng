@@ -11,51 +11,45 @@ Please also refer to the **[Documentation](https://prior99.github.io/node-libpng
 
 ## Table of contents
 
- * [node-libpng](#node-libpng)
-    * [Table of contents](#table-of-contents)
-    * [Supported environments](#supported-environments)
-    * [Usage](#usage)
-       * [Reading (Decoding)](#reading-decoding)
-           * [Reading PNG files using Promises](#reading-png-files-using-promises)
-           * [Reading PNG files using a callback](#reading-png-files-using-a-callback)
-           * [Reading PNG files synchroneously](#reading-png-files-synchroneously)
-           * [Decoding a buffer](#decoding-a-buffer)
-        * [Writing (Encoding)](#writing-encoding)
-           * [Writing PNG files using Promises](#writing-png-files-using-promises)
-           * [Writing PNG files using a callback](#writing-png-files-using-a-callback)
-           * [Writing PNG files synchroneously](#writing-png-files-synchroneously)
-           * [Encoding into a Buffer](#encoding-into-a-buffer)
-        * [Accessing the pixels](#accessing-the-pixels)
-           * [Accessing in the image's color format](#accessing-in-the-images-color-format)
-           * [Accessing in rgba format](#accessing-in-rgba-format)
-        * [Modifying the image](#modifying-the-image)
-           * [Cropping](#cropping)
-           * [Resizing the canvas](#resizing-the-canvas)
-           * [Copying an image into another image](#copying-an-image-into-another-image)
-           * [Filling an area with a specified color](#filling-an-area-with-a-specified-color)
-           * [Setting a single pixel](#setting-a-single-pixel)
-    * [Benchmark](#benchmark)
-       * [Read access (Decoding)](#read-access-decoding)
-       * [Write access (Encoding)](#write-access-encoding)
-       * [Pixel access](#pixel-access)
-    * [Contributing](#contributing)
-       * [Generating the libpng config](#generating-the-libpng-config)
-    * [Contributors](#contributors)
+- [node-libpng](#node-libpng)
+  - [Table of contents](#table-of-contents)
+  - [Supported environments](#supported-environments)
+  - [Usage](#usage)
+    - [Reading (Decoding)](#reading-decoding)
+      - [Reading PNG files using Promises](#reading-png-files-using-promises)
+      - [Reading PNG files using a callback](#reading-png-files-using-a-callback)
+      - [Reading PNG files synchroneously](#reading-png-files-synchroneously)
+      - [Decoding a buffer](#decoding-a-buffer)
+    - [Writing (Encoding)](#writing-encoding)
+      - [Writing PNG files using Promises](#writing-png-files-using-promises)
+      - [Writing PNG files using a callback](#writing-png-files-using-a-callback)
+      - [Writing PNG files synchroneously](#writing-png-files-synchroneously)
+      - [Encoding into a Buffer](#encoding-into-a-buffer)
+    - [Accessing the pixels](#accessing-the-pixels)
+      - [Accessing in the image's color format](#accessing-in-the-images-color-format)
+      - [Accessing in rgba format](#accessing-in-rgba-format)
+    - [Modifying the image](#modifying-the-image)
+      - [Cropping](#cropping)
+      - [Resizing the canvas](#resizing-the-canvas)
+      - [Copying an image into another image](#copying-an-image-into-another-image)
+      - [Filling an area with a specified color](#filling-an-area-with-a-specified-color)
+      - [Setting a single pixel](#setting-a-single-pixel)
+  - [Benchmark](#benchmark)
+    - [Read access (Decoding)](#read-access-decoding)
+    - [Write access (Encoding)](#write-access-encoding)
+    - [Pixel access](#pixel-access)
+  - [Contributing](#contributing)
+    - [Generating the libpng config](#generating-the-libpng-config)
+  - [Contributors](#contributors)
 
 ## Supported environments
 
 This is a native Addon to NodeJS which delivers prebuilt binaries. Only some environments are supported:
 
-| Node Version       | Windows 64-Bit     | Windows 32-Bit     | Linux 64-Bit       | Linux 32-Bit | OSX                |
-|--------------------|--------------------|--------------------|--------------------|--------------|--------------------|
-| Earlier            | ✗                  | ✗                  | ✗                  | ✗            | ✗                  |
-| Node 10 *(Abi 64)* | ✓                  | ✓                  | ✓                  | ✗            | ✓                  |
-| Node 11 *(Abi 67)* | ✗                  | ✗                  | ✗                  | ✗            | ✗                  |
-| Node 12 *(Abi 72)* | ✓                  | ✓                  | ✓                  | ✗            | ✓                  |
-| Node 13 *(Abi 79)* | ✗                  | ✗                  | ✗                  | ✗            | ✗                  |
-| Node 14 *(Abi 83)* | ✓                  | ✓                  | ✓                  | ✗            | ✓                  |
-| Node 15 *(Abi 88)* | ✓                  | ✓                  | ✓                  | ✗            | ✓                  |
-| Node 16 *(Abi 93)* | ✓                  | ✓                  | ✓                  | ✗            | ✓                  |
+| Node Version        | Windows 64-Bit | Windows 32-Bit | Linux 64-Bit | Linux 32-Bit | macOS |
+| ------------------- | -------------- | -------------- | ------------ | ------------ | ----- |
+| Node 16 _(Abi 93)_  | ｘ             | ｘ             | ✓            | ✗            | ✓     |
+| Node 18 _(Abi 108)_ | ｘ             | ｘ             | ✓            | ✗            | ✓     |
 
 ## Usage
 
@@ -63,22 +57,22 @@ This is a native Addon to NodeJS which delivers prebuilt binaries. Only some env
 
 Multiple ways of reading and decoding PNG encoded images exist:
 
- * [readPngFile](https://prior99.github.io/node-libpng/docs/globals.html#readpngfile) Reads a PNG file and returns a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded data.
-    * The function can take an optional argument for using a node-style callback API. [Example](#reading-png-files-using-a-callback)
-    * The function will return a Promise when not providing a callback. [Example](#reading-png-files-using-promises)
- * [readPngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#readpngfilesync) Will read a PNG file synchroneously and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded image. [Example](#reading-png-files-synchroneously)
- * [decode](https://prior99.github.io/node-libpng/docs/globals.html#decode) Will decode a Buffer of raw PNG file data and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance. [Example](#decoding-a-buffer)
+- [readPngFile](https://prior99.github.io/node-libpng/docs/globals.html#readpngfile) Reads a PNG file and returns a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded data.
+  - The function can take an optional argument for using a node-style callback API. [Example](#reading-png-files-using-a-callback)
+  - The function will return a Promise when not providing a callback. [Example](#reading-png-files-using-promises)
+- [readPngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#readpngfilesync) Will read a PNG file synchroneously and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance with the decoded image. [Example](#reading-png-files-synchroneously)
+- [decode](https://prior99.github.io/node-libpng/docs/globals.html#decode) Will decode a Buffer of raw PNG file data and return a [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) instance. [Example](#decoding-a-buffer)
 
 #### Reading PNG files using Promises
 
 In order to use the Promise-based API, simply omit the third argument.
 
 ```typescript
-import { readPngFile } from "node-libpng";
+import { readPngFile } from 'node-libpng';
 
 async function readMyFile() {
-    const image = await readPngFile("path/to/image.png");
-    console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
+  const image = await readPngFile('path/to/image.png');
+  console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
 }
 ```
 
@@ -89,15 +83,15 @@ If an error occured while reading the file or decoding the buffer, the Promise w
 In order to use the callback-based API, simply provide a callback as the third argument.
 
 ```typescript
-import { readPngFile } from "node-libpng";
+import { readPngFile } from 'node-libpng';
 
 function readMyFile() {
-    readPngFile("path/to/image.png", (error, image) => {
-        if (error !== null) {
-            // TODO: Check what `error` contains.
-        }
-        console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
-    });
+  readPngFile('path/to/image.png', (error, image) => {
+    if (error !== null) {
+      // TODO: Check what `error` contains.
+    }
+    console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
+  });
 }
 ```
 
@@ -110,11 +104,11 @@ it will be `undefined`.
 It is possible to read the image from the disk in a blocking way, using Node's `readFileSync`:
 
 ```typescript
-import { readPngFileSync } from "node-libpng";
+import { readPngFileSync } from 'node-libpng';
 
 function readMyFile() {
-    const image = readPngFileSync("path/to/image.png");
-    console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
+  const image = readPngFileSync('path/to/image.png');
+  console.log(`Reading was successful. The dimensions of the image are ${image.width}x${image.height}.`);
 }
 ```
 
@@ -141,33 +135,33 @@ The decoding happens synchroneously.
 
 Multiple ways for encoding and writing raw image data exist:
 
- * [writePngFile](https://prior99.github.io/node-libpng/docs/globals.html#writepngfile) Writes the raw data into a PNG file using Promises or a callback.
-    * The function can take an optional argument for using a node-style callback API. [Example](#writing-png-files-using-a-callback)
-    * The function will return a Promise when not providing a callback. [Example](#writing-png-files-using-promises)
- * [writePngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#writepngfilesync) Writes the raw data into a PNG file synchroneously. [Example](#writing-png-files-synchroneously)
- * [encode](https://prior99.github.io/node-libpng/docs/globals.html#encode) Encodes the raw data into a Buffer containing the PNG file's data. [Example](#encoding-into-a-buffer)
- * [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) contains methods for encoding and writing modified image data:
-    * [PngImage.encode](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#encode) The same as calling the free function [encode]() with `PngImage.data`.
-    * [PngImage.write](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#write) The same as calling the free function [writePngFile]() with `PngImage.data`.
-    * [PngImage.writeSync](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#writesync) The same as calling the free function [writePngFileSync]() with `PngImage.data`.
+- [writePngFile](https://prior99.github.io/node-libpng/docs/globals.html#writepngfile) Writes the raw data into a PNG file using Promises or a callback.
+  - The function can take an optional argument for using a node-style callback API. [Example](#writing-png-files-using-a-callback)
+  - The function will return a Promise when not providing a callback. [Example](#writing-png-files-using-promises)
+- [writePngFileSync](https://prior99.github.io/node-libpng/docs/globals.html#writepngfilesync) Writes the raw data into a PNG file synchroneously. [Example](#writing-png-files-synchroneously)
+- [encode](https://prior99.github.io/node-libpng/docs/globals.html#encode) Encodes the raw data into a Buffer containing the PNG file's data. [Example](#encoding-into-a-buffer)
+- [PngImage](https://prior99.github.io/node-libpng/docs/classes/pngimage.html) contains methods for encoding and writing modified image data:
+  - [PngImage.encode](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#encode) The same as calling the free function [encode]() with `PngImage.data`.
+  - [PngImage.write](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#write) The same as calling the free function [writePngFile]() with `PngImage.data`.
+  - [PngImage.writeSync](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#writesync) The same as calling the free function [writePngFileSync]() with `PngImage.data`.
 
 #### Writing PNG files using Promises
 
 In order to use the Promise-based API, simply omit the 4th argument.
 
 ```typescript
-import { writePngFile } from "node-libpng";
+import { writePngFile } from 'node-libpng';
 
 async function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file.
-    const imageData = Buffer.alloc(100 * 60 * 3);
-    // TODO: Manipulate the image data somehow.
-    const options = {
-        width: 100,
-        height: 60
-    };
-    await writePngFile("path/to/image.png", imageData, options);
-    console.log("File successfully written.");
+  // Let's write a 100x60 pixel PNG file.
+  const imageData = Buffer.alloc(100 * 60 * 3);
+  // TODO: Manipulate the image data somehow.
+  const options = {
+    width: 100,
+    height: 60
+  };
+  await writePngFile('path/to/image.png', imageData, options);
+  console.log('File successfully written.');
 }
 ```
 
@@ -184,22 +178,22 @@ reject with the error.
 In order to use the callback-based API, provide a callback as the 4th argument.
 
 ```typescript
-import { writePngFile } from "node-libpng";
+import { writePngFile } from 'node-libpng';
 
 function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file.
-    const imageData = Buffer.alloc(100 * 60 * 3);
-    // TODO: Manipulate the image data somehow.
-    const options = {
-        width: 100,
-        height: 60
-    };
-    await writePngFile("path/to/image.png", imageData, options, (error) => {
-        if (error !== null) {
-            // TODO: Check what `error` contains.
-        }
-        console.log("File successfully written.");
-    });
+  // Let's write a 100x60 pixel PNG file.
+  const imageData = Buffer.alloc(100 * 60 * 3);
+  // TODO: Manipulate the image data somehow.
+  const options = {
+    width: 100,
+    height: 60
+  };
+  await writePngFile('path/to/image.png', imageData, options, (error) => {
+    if (error !== null) {
+      // TODO: Check what `error` contains.
+    }
+    console.log('File successfully written.');
+  });
 }
 ```
 
@@ -216,18 +210,18 @@ in the callback. Otherwise `null` will be passed.
 It is possible to write the image to disk in a blocking way, using Node's `writeFileSync`:
 
 ```typescript
-import { writePngFileSync } from "node-libpng";
+import { writePngFileSync } from 'node-libpng';
 
 function writeMyFile() {
-    // Let's write a 100x60 pixel PNG file.
-    const imageData = Buffer.alloc(100 * 60 * 3);
-    // TODO: Manipulate the image data somehow.
-    const options = {
-        width: 100,
-        height: 60
-    };
-    writePngFileSync("path/to/image.png", imageData, options);
-    console.log("File successfully written.");
+  // Let's write a 100x60 pixel PNG file.
+  const imageData = Buffer.alloc(100 * 60 * 3);
+  // TODO: Manipulate the image data somehow.
+  const options = {
+    width: 100,
+    height: 60
+  };
+  writePngFileSync('path/to/image.png', imageData, options);
+  console.log('File successfully written.');
 }
 ```
 
@@ -265,11 +259,11 @@ The encoding happens synchroneously.
 
 PNG specifies five different types of colors:
 
- * [Gray Scale](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale)
- * [Gray Scale with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale_alpha)
- * [Palette (Indexed)](https://prior99.github.io/node-libpng/docs/enums/colortype.html#palette)
- * [RGB](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgb)
- * [RGB with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgba)
+- [Gray Scale](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale)
+- [Gray Scale with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#gray_scale_alpha)
+- [Palette (Indexed)](https://prior99.github.io/node-libpng/docs/enums/colortype.html#palette)
+- [RGB](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgb)
+- [RGB with Alpha channel](https://prior99.github.io/node-libpng/docs/enums/colortype.html#rgba)
 
 In the [PngImage.data](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#data) buffer the colors are stored
 the way they were encoded in the PNG image. This library provides utilities for accessing the pixels in both the native format
@@ -283,24 +277,25 @@ can be used.
 ##### Example for a gray scale image
 
 ```typescript
-import { readPngFileSync } from "node-libpng";
+import { readPngFileSync } from 'node-libpng';
 
-const image = readPngFileSync("path/to/grayscale-image.png");
+const image = readPngFileSync('path/to/grayscale-image.png');
 const color = image.at(10, 10);
 const colorType = image.colorType;
 // Will log: "The color type of the image is gray-scale. Pixel at 10,10 is of color 168."
-console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(', ')}.`);
 ```
 
 ##### Example for a rgb image:
 
 ```typescript
-const image = readPngFileSync("path/to/rgb-image.png");
+const image = readPngFileSync('path/to/rgb-image.png');
 const color = image.at(10, 10);
 const colorType = image.colorType;
 // Will log: "The color type of the image is rgb. Pixel at 10,10 is of color 100, 150, 200."
-console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(', ')}.`);
 ```
+
 Dealing with all of these different color formats can be quite irritating. A set of conversion utilities as for example
 a utility for converting any color format to rgba ([convertToRGBA](https://prior99.github.io/node-libpng/docs/globals.html#converttorgba)) exist.
 
@@ -313,11 +308,11 @@ A method for retrieving the automatically converted color exists: [PngImage.rgba
 It will convert any color into rgba format. Unlike [other implementations](https://www.npmjs.com/package/pngjs#pngjs), all color formats are supported.
 
 ```typescript
-const image = readPngFileSync("path/to/any-color-format-image.png");
+const image = readPngFileSync('path/to/any-color-format-image.png');
 const color = image.rgbaAt(10, 10);
 const colorType = image.colorType;
 // Will log: "The color type of the image is palette. Pixel at 10,10 is of color 100, 150, 200, 255."
-console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(", ")}.`);
+console.log(`The color type of the image is ${colorType}. Pixel at 10,10 is of color ${color.join(', ')}.`);
 ```
 
 ### Modifying the image
@@ -331,9 +326,9 @@ A simple utility for cropping an image to a sub-rectangle exists: [PngImage.crop
 It will reduce the image in-place to the specified rectangle:
 
 ```typescript
-import { readPngFileSync, rect } from "node-libpng";
+import { readPngFileSync, rect } from 'node-libpng';
 
-const image = readPngFileSync("path/to/image.png");
+const image = readPngFileSync('path/to/image.png');
 image.crop(rect(10, 10, 100, 100));
 // Will log: "New dimensions: 100x100".
 console.log(`New dimensions: ${image.width}x${image.height}.`);
@@ -346,23 +341,24 @@ Use [PngImage.resizeCanvas](https://prior99.github.io/node-libpng/docs/classes/p
 Take a look at [ResizeCanvasArguments](https://prior99.github.io/node-libpng/docs/interfaces/resizecanvasarguments.html).
 
 It takes a configuration object which makes it possible to provide:
- * An offset to the top left (a padding).
- * A fill color for uncovered regions.
- * A subrectangle of the image to use.
- * The new dimensions for the image.
+
+- An offset to the top left (a padding).
+- A fill color for uncovered regions.
+- A subrectangle of the image to use.
+- The new dimensions for the image.
 
 In the following example, a 10 pixel margin is applied to the top and to the left and a 50x50 pixel area is copied from the image at offset 20,20.
 The image is resized to 100x100, so a 40 pixel margin will exist to the right and to the bottom. The background is filled in red:
 
 ```typescript
-import { readPngFileSync, rect, xy, colorRGB } from "node-libpng";
+import { readPngFileSync, rect, xy, colorRGB } from 'node-libpng';
 
-const image = readPngFileSync("path/to/image.png");
+const image = readPngFileSync('path/to/image.png');
 image.resizeCanvas({
-    offset: xy(10, 10),
-    clip: rect(20, 20, 50, 50),
-    dimensions: xy(100, 100),
-    fillColor: colorRGB(255, 0, 0),
+  offset: xy(10, 10),
+  clip: rect(20, 20, 50, 50),
+  dimensions: xy(100, 100),
+  fillColor: colorRGB(255, 0, 0)
 });
 // Will log: "New dimensions: 100x100".
 console.log(`New dimensions: ${image.width}x${image.height}.`);
@@ -373,10 +369,10 @@ console.log(`New dimensions: ${image.width}x${image.height}.`);
 Use [PngImage.copyFrom](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#copyfrom) to copy an area of one image into another one:
 
 ```typescript
-import { readPngFileSync, xy, rect } from "node-libpng";
+import { readPngFileSync, xy, rect } from 'node-libpng';
 
-const source = readPngFileSync("path/to/source-image.png");
-const target = readPngFileSync("path/to/target-image.png");
+const source = readPngFileSync('path/to/source-image.png');
+const target = readPngFileSync('path/to/target-image.png');
 
 target.copyFrom(source, xy(10, 10), rect(100, 100, 50, 50));
 ```
@@ -389,9 +385,9 @@ The offset and the subrectangle can be omitted to copy the whole source image to
 Use [PngImage.fill](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#fill) to fill an area with a specified color:
 
 ```typescript
-import { readPngFileSync, colorRGB, rect } from "node-libpng";
+import { readPngFileSync, colorRGB, rect } from 'node-libpng';
 
-const image = readPngFileSync("path/to/source-image.png");
+const image = readPngFileSync('path/to/source-image.png');
 // Change a 100x100 pixel area at offset 10,10 to red:
 image.fill(colorRGB(255, 0, 0), rect(10, 10, 100, 100));
 ```
@@ -401,9 +397,9 @@ image.fill(colorRGB(255, 0, 0), rect(10, 10, 100, 100));
 With [PngImage.set](https://prior99.github.io/node-libpng/docs/classes/pngimage.html#set) an individual pixel's color can be changed:
 
 ```typescript
-import { readPngFileSync, colorRGB, xy } from "node-libpng";
+import { readPngFileSync, colorRGB, xy } from 'node-libpng';
 
-const image = readPngFileSync("path/to/source-image.png");
+const image = readPngFileSync('path/to/source-image.png');
 // Change the pixel at 10,10 to red:
 image.set(colorRGB(255, 0, 0), xy(10, 10));
 ```
@@ -419,7 +415,7 @@ The time to fully decode a 4096x4096 image is measured (Higher is better).
 
 ![read benchmark](images/benchmark-read.png)
 
-*(The x-axis scale shows the amount of fully decoded images per second.)*
+_(The x-axis scale shows the amount of fully decoded images per second.)_
 
 ### Write access (Encoding)
 
@@ -428,7 +424,7 @@ The time to fully encode a 4096x4096 image is measured (Higher is better).
 
 ![access benchmark](images/benchmark-encode.png)
 
-*(The x-axis scale shows the amount of fully encoded images per second.)*
+_(The x-axis scale shows the amount of fully encoded images per second.)_
 
 ### Pixel Access
 
@@ -437,7 +433,7 @@ The time to fully access every pixel in the raw data is measured (Higher is bett
 
 ![access benchmark](images/benchmark-access.png)
 
-*(The x-axis scale shows the amount of fully accessed images per second.)*
+_(The x-axis scale shows the amount of fully accessed images per second.)_
 
 ## Contributing
 
@@ -469,4 +465,4 @@ cp pnglibconf.h ../../config/linux/
 
 ## Contributors
 
- - Frederick Gnodtke
+- Frederick Gnodtke
