@@ -23,7 +23,7 @@
     "test": "cross-env TZ=UTC jest",
     "lint": "eslint",
     "clean": "rm -rf dist build",
-    "docs": "typedoc --mode file --out docs/ --exclude '**/test-*.ts' src/"
+    "docs": "typedoc --out docs/ --exclude '**/test-*.ts' src/"
   },
   "repository": {
     "type": "git",
@@ -80,7 +80,7 @@
     "nan": "^2.18.0",
     "node-gyp": "^10.0.1",
     "ts-jest": "^29.1.1",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.25.7",
     "typescript": "^5.3.3"
   },
   "dependencies": {
