@@ -1,3 +1,4 @@
+dist: focal
 language: node_js
 compiler: gcc
 env:
@@ -21,6 +22,12 @@ jobs:
       node_js: "16"
       os: linux
     - stage: build
+      node_js: "18"
+      os: linux
+    - stage: build
+      node_js: "20"
+      os: linux
+    - stage: build
       node_js: "10"
       os: osx
     - stage: build
@@ -35,6 +42,15 @@ jobs:
     - stage: build
       node_js: "16"
       os: osx
+      osx_image: xcode13.1
+    - stage: build
+      node_js: "18"
+      os: osx
+      osx_image: xcode13.1
+    - stage: build
+      node_js: "20"
+      os: osx
+      osx_image: xcode13.1
 addons:
   apt:
     sources:
@@ -47,10 +63,13 @@ addons:
 before_install:
   - npm install -g yarn
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-7";
-      export CXX="g++-7";
-      export LINK="gcc-7";
-      export LINKXX="g++-7";
+    export CC="gcc-7";
+    export CXX="g++-7";
+    export LINK="gcc-7";
+    export LINKXX="g++-7";
+    sed -i '911s!^!//!' deps/libpng/pngpriv.h;
+    else
+    sed -i '' '911s/^/\/\/ /' deps/libpng/pngpriv.h;
     fi
   - node --version
   - yarn --version
