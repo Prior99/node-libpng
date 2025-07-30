@@ -21,26 +21,26 @@ exports[`PngImage copyFrom throws an error if the source rectangle exceeds the i
 exports[`PngImage copyFrom throws an error if the source rectangle is invalid 1`] = `"Invalid source rectangle."`;
 
 exports[`PngImage detects the correct color with an image of color type gray-scale 1`] = `
-Array [
+[
   85,
 ]
 `;
 
 exports[`PngImage detects the correct color with an image of color type gray-scale-alpha 1`] = `
-Array [
+[
   85,
   127,
 ]
 `;
 
 exports[`PngImage detects the correct color with an image of color type palette 1`] = `
-Array [
+[
   3,
 ]
 `;
 
 exports[`PngImage detects the correct color with an image of color type rgb 1`] = `
-Array [
+[
   255,
   128,
   64,
@@ -48,7 +48,7 @@ Array [
 `;
 
 exports[`PngImage detects the correct color with an image of color type rgba 1`] = `
-Array [
+[
   255,
   128,
   64,

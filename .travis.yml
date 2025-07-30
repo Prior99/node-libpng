@@ -1,3 +1,4 @@
+dist: noble
 language: node_js
 compiler: gcc
 env:
@@ -6,52 +7,25 @@ env:
 jobs:
   include:
     - stage: build
-      node_js: "10"
+      node_js: "18"
       os: linux
     - stage: build
-      node_js: "12"
+      node_js: "20"
       os: linux
     - stage: build
-      node_js: "14"
+      node_js: "22"
       os: linux
-    - stage: build
-      node_js: "15"
-      os: linux
-    - stage: build
-      node_js: "16"
-      os: linux
-    - stage: build
-      node_js: "10"
-      os: osx
-    - stage: build
-      node_js: "12"
-      os: osx
-    - stage: build
-      node_js: "14"
-      os: osx
-    - stage: build
-      node_js: "15"
-      os: osx
-    - stage: build
-      node_js: "16"
-      os: osx
 addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - gcc-7
-      - g++-7
+      - gcc
+      - g++
       - make
       - git
 before_install:
   - npm install -g yarn
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-7";
-      export CXX="g++-7";
-      export LINK="gcc-7";
-      export LINKXX="g++-7";
-    fi
   - node --version
   - yarn --version
 script:
